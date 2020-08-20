@@ -19,7 +19,7 @@ import gidlogger as glog
 
 # endregion [Imports]
 
-__updated__ = '2020-08-12 13:38:43'
+__updated__ = '2020-08-17 16:00:01'
 
 # region [Logging]
 
@@ -289,7 +289,7 @@ def clearit(in_file):
 # region [Functions_Paths]
 
 # -------------------------------------------------------------- pathmaker -------------------------------------------------------------- #
-def pathmaker(first_segment, *in_path_segments, rev=None):
+def pathmaker(first_segment, *in_path_segments, rev=False):
     # -------------------------------------------------------------- pathmaker -------------------------------------------------------------- #
     """
     Normalizes input path or path fragments, replaces '\\\\' with '/' and combines fragments.
@@ -309,6 +309,7 @@ def pathmaker(first_segment, *in_path_segments, rev=None):
     _first = os.getcwd() if first_segment == 'cwd' else first_segment
     _path = os.path.join(_first, *in_path_segments)
     _path = os.path.normcase(_path)
+    _path = _path.replace('\\\\', '/')
     _path = _path.replace('\\', '/')
     if rev is True:
         _path = _path.replace('/', '\\')

@@ -34,27 +34,7 @@ import gidlogger as glog
 
 # endregion [Imports]
 
-__updated__ = '2020-08-10 20:58:45'
-
-# region [Localized_Imports]
-
-# pathmaker = pathmaker
-# writeit = writeit
-# readit = readit
-# clearit = clearit
-# pickleit = pickleit
-# get_pickled = get_pickled
-# ext_splitter = ext_splitter
-# splitoff = splitoff
-# GiUserConfig = GiUserConfig
-# GiSolidConfig = GiSolidConfig
-# GiDataBase = GiDataBase
-# give_std_repr = give_std_repr
-# RandomRGB = RandomRGB
-# not_nempty = not_nempty
-# time_log = time_log
-
-# endregion [Localized_Imports]
+__updated__ = '2020-08-16 23:42:23'
 
 
 # region [Logging]
@@ -87,13 +67,13 @@ log.info(glog.imported(__name__))
 
 class QuickFile:
     instance_list = []
+
     def __init__(self, always_clear=True):
         self.extension = 'txt'
         self.name = self._check_name()
         self.path = pathmaker('cwd', self.name)
         if always_clear is True:
             clearit(self.path)
-
 
     def _check_name(self):
         _num = 1

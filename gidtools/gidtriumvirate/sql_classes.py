@@ -3,9 +3,7 @@
 
 # *NORMAL Imports -->
 # from collections import namedtuple
-from contextlib import contextmanager
 from sqlite3.dbapi2 import Error
-from jinja2 import Environment, BaseLoader
 # from natsort import natsorted
 # import argparse
 # import datetime
@@ -17,7 +15,7 @@ import sqlite3 as sqlite
 # import time
 import configparser
 # *GID Imports -->
-from gidtools.gidfiles import pathmaker, writeit, readit, clearit, pickleit, get_pickled, ext_splitter, splitoff, cascade_rename
+from gidtools.gidfiles import cascade_rename, ext_splitter, pathmaker, readit, splitoff, writeit
 
 import gidlogger as glog
 
@@ -28,22 +26,12 @@ import gidlogger as glog
 # from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem, QHeaderView, QButtonGroup, QTreeWidgetItemIterator, QMenu
 
 # *Local Imports -->
-from gidtools.gidtriumvirate.data import SQL_JINJA_DICT
 # endregion [Imports]
 
-__updated__ = '2020-08-10 23:05:17'
+__updated__ = '2020-08-19 18:17:38'
 
 # region [Localized_Imports]
 
-pathmaker = pathmaker
-writeit = writeit
-readit = readit
-clearit = clearit
-pickleit = pickleit
-get_pickled = get_pickled
-ext_splitter = ext_splitter
-splitoff = splitoff
-cascade_rename = cascade_rename
 
 # endregion [Localized_Imports]
 
@@ -188,40 +176,6 @@ class GidSQLiteExecutor:
 
 # region [Class_2]
 
-class GidSQLPhraser:
-
-    def __init__(self, in_table_name):
-        self.table_name = in_table_name
-        self.arg_dict = self._empty_arg_dict()
-
-    def sql_phrase(self):
-        log.debug(f"loading template with key '{self.phrase_type}' as '{self.phrase_type.upper()}'")
-        template = Environment(loader=BaseLoader).from_string(SQL_JINJA_DICT.get(self.phrase_type.upper()))
-        log.debug(f" loaded template [{str(template)}] or [{SQL_JINJA_DICT.get(self.phrase_type.upper())}]")
-        self.arg_dict['table_name'] = self.table_name
-        self.phrase = template.render(self.arg_dict)
-        self.arg_dict = self._empty_arg_dict()
-        log.debug(f" sql phrase '{self.phrase}' created")
-        return self.phrase
-
-    @staticmethod
-    def _empty_arg_dict():
-        return {'columns': [], 'wheres': [], 'uniques': [], 'categories': [], }
-
-    def set_type(self, in_type: str):
-        self.phrase_type = in_type.upper()
-
-    def __setitem__(self, key, value):
-        if isinstance(value, (str, tuple)):
-            self.arg_dict[key.casefold()].append(value)
-        elif isinstance(value, list):
-            self.arg_dict[key.casefold()] += value
-
-    def __str__(self):
-        return self.table_name
-
-    def __repr__(self):
-        return f"{self.__class__} ('{self.table_name}')"
 
 # endregion [Class_2]
 
@@ -266,15 +220,6 @@ class GidSQLiteDatabaser:
             self.executor(self.scripter['extra_init'], is_script=True)
         except KeyError:
             log.debug(f"No extra init found at '{self.scripter.script_folder}'")
-
-    @contextmanager
-    def new_table(self, in_table_name):
-        _new_table = GidSQLPhraser(in_table_name)
-        yield _new_table
-        _new_table.set_type('CREATE_TABLE')
-        self.executor(_new_table.sql_phrase())
-        self.executor(self.scripter.std_phrases['insert_toc'].replace('?', f'"{str(_new_table)}"'))
-        self.phrasers[in_table_name.casefold()] = _new_table
 
 
 # endregion [Class_3]
