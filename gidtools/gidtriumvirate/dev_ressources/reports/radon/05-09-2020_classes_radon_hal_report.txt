@@ -1,0 +1,13 @@
+classes.py:
+    h1: 9
+    h2: 95
+    N1: 59
+    N2: 118
+    vocabulary: 104
+    length: 177
+    calculated_length: 652.6656078044209
+    volume: 1185.9778301109732
+    difficulty: 5.589473684210526
+    effort: 6628.991871462387
+    time: 368.27732619235485
+    bugs: 0.3953259433703244

@@ -11,6 +11,9 @@
 # import shutil
 from gidtools.gidfiles.functions import readit, writeit
 import time
+import timeit
+import matplotlib.pyplot as plt
+import statistics
 # import os
 # import sys
 # from contextlib import contextmanager
@@ -29,7 +32,7 @@ from gidtools.gidfiles import pathmaker
 
 # endregion [Imports]
 
-__updated__ = '2020-08-16 01:48:10'
+__updated__ = '2020-09-14 21:37:31'
 
 # region [Logging]
 
@@ -185,7 +188,15 @@ def pylisterer(in_file, in_list_name='LIST_1', in_out_file='default'):
 # endregion [Functions_9]
 
 
+def nesteddictvalues(d):
+    for v in d.values():
+        if isinstance(v, dict):
+            yield from nesteddictvalues(v)
+        else:
+            yield v
+
 # region [Functions_10]
+
 
 def rec_dict_walker(value, key=None):
     if isinstance(value, dict):
@@ -198,6 +209,25 @@ def rec_dict_walker(value, key=None):
             yield key, value
 
 # endregion [Functions_10]
+
+
+def timeit_runner(func, repeat=1, graph='scatter'):
+    _graph_data = []
+    _value_list = []
+    timeit_object = timeit.Timer(func)
+    for index, i in enumerate(range(repeat)):
+        _time = timeit_object.timeit(number=1)
+        _graph_data.append((index, _time))
+        _value_list.append(_time)
+    print(f"Mean: {round(statistics.mean(_value_list),2)}")
+    print(f"Median: {round(statistics.median(_value_list),2)}")
+    print(f"Std Dev: {round(statistics.stdev(_value_list),2)}")
+    x, y = zip(*_graph_data)
+    if graph == 'scatter':
+        plt.scatter(x, y)
+    elif graph == 'plot':
+        plt.plot(x, y)
+    plt.show()
 
 
 # region [Main_Exec]

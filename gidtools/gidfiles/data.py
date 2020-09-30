@@ -3,13 +3,13 @@
 # *NORMAL Imports -->
 
 # *GID Imports -->
-import gidlogger as glog
+
 
 # *QT Imports -->
 
 # endregion [Imports]
 
-__updated__ = '2020-07-29 08:05:11'
+__updated__ = '2020-08-17 13:17:18'
 
 # region [Localized_Imports]
 
@@ -19,8 +19,6 @@ __updated__ = '2020-07-29 08:05:11'
 
 # region [Logging]
 
-log = glog.aux_logger(__name__)
-log.info(glog.imported(__name__))
 
 # endregion [Logging]
 

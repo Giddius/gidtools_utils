@@ -11,7 +11,7 @@ from enum import Flag, auto, Enum
 
 # endregion [Imports]
 
-__updated__ = '2020-09-07 18:33:16'
+__updated__ = '2020-09-07 20:00:43'
 
 
 # region [Logging]

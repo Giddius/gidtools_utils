@@ -4,7 +4,6 @@
 # import argparse
 # import contextlib
 # import datetime
-from gidtools.gidfiles.functions import writeit
 import os
 # import pickle
 # import sys
@@ -14,7 +13,6 @@ import os
 # import re
 import shutil
 import configparser
-import subprocess
 # import time
 from contextlib import contextmanager
 # from pprint import *
@@ -23,7 +21,6 @@ from sqlite3 import Error
 # * gid imports -->
 import gidlogger as glog
 import gidtools.gidfiles as gif
-from gidtools.gidfiles import create_folder
 
 # * Qt imports -->
 # from PyQt5 import QtWidgets
@@ -32,11 +29,11 @@ from gidtools.gidfiles import create_folder
 # from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem
 
 # *Local Imports -->
-from gidtools.gidtriumvirate.data import USER_CFG_STRING, SOLID_CFG_STRING, DB_CFG_STRING, EDITORCONFIG_STRING, TODO_STRING
+
 
 # endregion [Imports]
 
-__updated__ = '2020-08-12 15:55:34'
+__updated__ = '2020-08-16 16:28:46'
 
 # region [Logging]
 
@@ -426,61 +423,11 @@ class GiVariousConfig(GidConfigMaster):
 
 # region [Class_1]
 
-class RessourceSetUper:
-    def __init__(self, extra_folders=None, extra_files=None, solid_cfg_str=SOLID_CFG_STRING, user_cfg_str=USER_CFG_STRING, db_cfg_str=DB_CFG_STRING):
-        self.solid_cfg_string = solid_cfg_str
-        self.user_cfg_string = user_cfg_str
-        self.db_cfg_string = db_cfg_str
-        self.config_dict = {'solid_config.ini': self.solid_cfg_string, 'user_config.ini': self.user_cfg_string, 'db_config.ini': self.db_cfg_string}
-        self.extra_folders = {} if extra_folders is None else extra_folders
-        self.extra_folders['dev_ressources'] = ['archive', 'notes']
-        self.extra_folders['ressources'] = ['archive', 'data', 'icons']
-        self.extra_folders['cwd'] = ['output', 'input', 'Ui']
-        self.extra_folders[gif.path_part_remove(os.getcwd())] = ['tests']
-        self.extra_files = {} if extra_files is None else extra_files
-        self.extra_files['cwd'] = ['main.py', 'classes.py', 'data.py', 'misc.py', 'cli.py']
-        self.extra_files['Ui'] = ['MainWindow.ui','ressources.qrc']
-        self.config_folder = gif.pathmaker('cwd', 'config')
-        self.ressource_folder = gif.pathmaker('cwd', 'ressources')
-        self.dev_ressources = gif.pathmaker('cwd', 'dev_ressources')
-
-    def setup_config(self, config_reset=False):
-        if os.path.isdir(self.config_folder) is False:
-            os.makedirs(self.config_folder)
-        for key, value in self.config_dict.items():
-            self._setup_config_helper(key, value, config_reset)
-
-    def _setup_config_helper(self, config_name, config_string, config_reset):
-        if os.path.isfile(gif.pathmaker(self.config_folder, config_name)) is False or config_reset is True:
-            gif.writeit(gif.pathmaker(self.config_folder, config_name), config_string)
-
-    def setup_folders(self):
-        create_folder(self.ressource_folder)
-        create_folder(self.dev_ressources)
-        for key, value in self.extra_folders.items():
-            for item in value:
-                create_folder(gif.pathmaker(key, item))
-
-    def setup_files(self):
-        writeit(gif.pathmaker(gif.path_part_remove(os.getcwd()), '.editorconfig'), EDITORCONFIG_STRING)
-        writeit(gif.pathmaker(gif.path_part_remove(os.getcwd()), 'TODO.md'), TODO_STRING)
-        for key, value in self.extra_files.items():
-            for item in value:
-                _prefix = gif.pathmaker('cwd').split('/')[-1]
-                _file = gif.pathmaker(key, _prefix + '_' + item)
-                writeit(_file, '')
-
-    def run_creation(self):
-        self.setup_config()
-        self.setup_folders()
-        self.setup_files()
-        subprocess.run("pipenv install", check=True, shell=True, cwd=os.getcwd())
 
 # endregion [Class_1]
 
 
 # region [Main_Exec]
-
 if __name__ == '__main__':
     pass
 
