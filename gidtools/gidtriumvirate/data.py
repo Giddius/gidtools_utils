@@ -30,7 +30,7 @@ import gidlogger as glog
 
 # endregion [Imports]
 
-__updated__ = '2020-08-19 18:18:03'
+__updated__ = '2020-08-29 21:06:18'
 
 # region [Localized_Imports]
 
@@ -66,12 +66,19 @@ log.info(glog.imported(__name__))
 
 # region [Data_1]
 
-SOLID_CFG_STRING = """
-[DEFAULT]
-main_dir = cwd
-project_name = PROJECT_NAME
+SOLID_CFG_STRING = """[DEFAULT]
+main_dir: +cwd+
+project_name: %PROJECT_NAME%
 
-[default_keys]
+[specification]
+is_gui:
+is_db:
+
+[locations]
+ressources_folder: +cwd+ressources
+data_folder: +cwd+ressources\data
+icon_folder: +cwd+ressources\icons
+archive_folder: +cwd+ressources\archive
 
 [hashes]
 

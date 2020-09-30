@@ -1,0 +1,24 @@
+sql_classes.py
+    LOC: 320
+    LLOC: 155
+    SLOC: 154
+    Comments: 57
+    Single comments: 57
+    Multi: 7
+    Blank: 102
+    - Comment Stats
+        (C % L): 18%
+        (C % S): 37%
+        (C + M % L): 20%
+** Total **
+    LOC: 320
+    LLOC: 155
+    SLOC: 154
+    Comments: 57
+    Single comments: 57
+    Multi: 7
+    Blank: 102
+    - Comment Stats
+        (C % L): 18%
+        (C % S): 37%
+        (C + M % L): 20%

@@ -9,4 +9,9 @@ setup(name='gidtools',
       author='Giddi',
       license='MIT',
       packages=find_packages(),
+      install_requires=[
+          'matplotlib',
+          'pytest',
+          'wmi',
+      ]
       )

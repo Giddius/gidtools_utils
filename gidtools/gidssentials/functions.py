@@ -17,7 +17,7 @@
 # import sqlite3 as sqlite
 # import sys
 # import time
-
+import wmi
 # *GID Imports -->
 # from gidtools.gidfiles import pathmaker, writeit, readit, clearit, pickleit, get_pickled, ext_splitter, splitoff
 # from gidtools.gidstuff import RandomRGB, not_nempty, time_log
@@ -32,7 +32,7 @@
 
 # endregion [Imports]
 
-__updated__ = '2020-08-12 13:47:32'
+__updated__ = '2020-09-15 04:13:41'
 
 
 # region [Logging]
@@ -62,6 +62,13 @@ __updated__ = '2020-08-12 13:47:32'
 
 
 # region [Functions_1]
+
+def get_drives():
+    _out = []
+    c = wmi.WMI()
+    for drive in c.Win32_LogicalDisk():
+        _out.append(drive.Caption)
+    return _out
 
 
 # endregion [Functions_1]

@@ -28,7 +28,7 @@ import gidlogger as glog
 # *Local Imports -->
 # endregion [Imports]
 
-__updated__ = '2020-08-19 18:17:38'
+__updated__ = '2020-09-15 20:30:54'
 
 # region [Localized_Imports]
 
@@ -125,20 +125,23 @@ class GidSQLiteExecutor:
             _out = False
         return _out
 
-    def execute_phrase(self, in_sql_phrase, in_variables, is_script, fetch):
-        conn = sqlite.connect(self.db_loc, isolation_level=None)
+    def execute_phrase(self, in_sql_phrase, in_variables, is_script, fetch, execute):
+        conn = sqlite.connect(self.db_loc, isolation_level=None, detect_types=sqlite.PARSE_DECLTYPES)
         if self.row_factory is not None:
             conn.row_factory = self.row_factory
         cursor = conn.cursor()
         try:
             if self.pragmas is not None and self.pragmas != '':
                 cursor.executescript(self.pragmas)
-                log.debug(f"Executed pragmas '{self.pragmas}' successfully")
+                log.info(f"Executed pragmas '{self.pragmas}' successfully")
             if is_script is True:
                 cursor.executescript(in_sql_phrase)
                 log.debug(f"Executet sql script '{in_sql_phrase}' successfully")
             else:
-                cursor.execute(in_sql_phrase, in_variables)
+                if execute == 'many':
+                    cursor.executemany(in_sql_phrase, in_variables)
+                else:
+                    cursor.execute(in_sql_phrase, in_variables)
                 log.debug(f"Executet sql phrase '{in_sql_phrase}' with args {str(in_variables)} successfully")
         except sqlite.Error as error:
 
@@ -154,9 +157,9 @@ class GidSQLiteExecutor:
         conn.close()
         return _out
 
-    def __call__(self, in_sql_phrase, in_variables=None, is_script=False, fetch='all'):
+    def __call__(self, in_sql_phrase, in_variables=None, is_script=False, fetch='all', execute='single'):
         _variables = '' if in_variables is None else in_variables
-        return self.execute_phrase(in_sql_phrase, _variables, is_script, fetch)
+        return self.execute_phrase(in_sql_phrase, _variables, is_script, fetch, execute)
 
     def enable_row_factory(self, in_factory=sqlite.Row):
         self.row_factory = in_factory
@@ -164,9 +167,33 @@ class GidSQLiteExecutor:
     def disable_row_factory(self):
         self.row_factory = None
 
+    def dump_sql(self):
+        _out = []
+        con = sqlite.connect(self.db_loc, isolation_level=None, detect_types=sqlite.PARSE_DECLTYPES)
+        for line in con.iterdump():
+            _out.append(line)
+        con.close()
+        return _out
+
     def vacuum(self):
         self("VACUUM")
         log.info("finished VACUUM the DB")
+
+    def insert_many(self, in_sql_phrase, in_variables=None):
+        _variables = "" if in_variables is None else in_variables
+
+        conn = sqlite.connect(self.db_loc, isolation_level=None, detect_types=sqlite.PARSE_DECLTYPES)
+        cursor = conn.cursor()
+        try:
+            if self.pragmas is not None and self.pragmas != '':
+                cursor.executescript(self.pragmas)
+                log.debug(f"Executed pragmas '{self.pragmas}' successfully")
+            cursor.executemany(in_sql_phrase, _variables)
+            log.debug(f"Executet sql phrase '{in_sql_phrase}' with args {str(_variables)} successfully")
+        except sqlite.Error as error:
+            log.critical(str(error) + f' - with SQL --> {in_sql_phrase} and args[{str(in_variables)}]' + '\n\n')
+            if 'syntax error' in str(error):
+                raise SyntaxError(error)
 
     def __repr__(self):
         return f"{self.__class__} ('{self.db_loc}')"
@@ -266,13 +293,15 @@ class GidSQLScripter:
 
 
 class GidSQLBuilder:
+    database = None
+
     def __init__(self, in_cfg_loc='default', in_db_class=GidSQLiteDatabaser):
         self.cfg_loc = pathmaker('cwd', 'config/db_config.ini') if in_cfg_loc == 'default' else in_cfg_loc
         self.cfg_tool = configparser.ConfigParser()
         self.cfg_tool.read(self.cfg_loc)
-        self.make_databaser(in_db_class)
+        self.make_database(in_db_class)
 
-    def make_databaser(self, in_db_class):
+    def make_database(self, in_db_class):
         _pragmas = self.cfg_tool.get('db_parameter', 'pragmas').replace(',', ';')
         _db_loc = pathmaker('cwd', self.cfg_tool.get('db_parameter', 'db_loc'))
         _backup_loc = self.cfg_tool.get('db_parameter', 'archive_loc')
@@ -280,12 +309,15 @@ class GidSQLBuilder:
         _executor = GidSQLiteExecutor(_db_loc, _pragmas)
         _scripter = GidSQLScripter(_script_folder)
         _startup_dict = {'overwrite': self.cfg_tool.getboolean('db_startup_parameter', 'overwrite'), 'in_max_backup': self.cfg_tool.getint('db_startup_parameter', 'max_backups')}
-        self.databaser = in_db_class(_executor, _scripter, _backup_loc, _startup_dict)
+        GidSQLBuilder.database = in_db_class(_executor, _scripter, _backup_loc, _startup_dict)
 
     @classmethod
-    def get_databaser(cls, in_cfg_loc='default', in_db_class=GidSQLiteDatabaser):
-        _builder = GidSQLBuilder(in_cfg_loc, in_db_class)
-        return _builder.databaser
+    def get_database(cls, in_cfg_loc='default', in_db_class=GidSQLiteDatabaser):
+        if cls.database is None:
+
+            _builder = GidSQLBuilder(in_cfg_loc, in_db_class)
+
+        return cls.database
 
 
 # endregion [Class_5]
@@ -295,6 +327,7 @@ class GidSQLBuilder:
 # endregion [Class_6]
 
 # region [Class_7]
+
 
 # endregion [Class_7]
 
@@ -310,6 +343,5 @@ class GidSQLBuilder:
 # region [Main_Exec]
 if __name__ == '__main__':
     pass
-
 
 # endregion [Main_Exec]

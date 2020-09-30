@@ -19,7 +19,7 @@ import gidlogger as glog
 
 # endregion [Imports]
 
-__updated__ = '2020-08-17 16:00:01'
+__updated__ = '2020-09-14 20:03:35'
 
 # region [Logging]
 
@@ -49,8 +49,8 @@ def loadjson(in_file):
     return _out
 
 
-def writejson(in_object, in_file, sort_keys=True):
-    writeit(in_file, json.dumps(in_object, sort_keys=sort_keys))
+def writejson(in_object, in_file, sort_keys=True, indent=0):
+    writeit(in_file, json.dumps(in_object, sort_keys=sort_keys, indent=indent))
 
 # endregion [Function_JSON]
 
@@ -61,7 +61,7 @@ def hash_to_solidcfg(in_file, in_name=None, in_config_loc='default'):
     _cfg = configparser.ConfigParser()
     _cfg_loc = pathmaker('cwd', 'config', 'solid_config.ini') if in_config_loc == 'default' else in_config_loc
     _bin_file = readbin(in_file)
-    _name = splitoff(in_file)[1] if in_name is None else in_name
+    _name = splitoff(in_file)[1].replace('.', '') if in_name is None else in_name
     _cfg.read(_cfg_loc)
     _hash = hashlib.md5(_bin_file).hexdigest()
     if _cfg.has_section('hashes') is False:
@@ -86,12 +86,16 @@ def ishash_same(in_file, in_name=None, in_config_loc='default'):
     _cfg.read(_cfg_loc)
     _hash = hashlib.md5(_bin_file).hexdigest()
     if _cfg.has_section('hashes') is True:
-        if _cfg.get('hashes', _name) != _hash:
+        if _cfg.has_option('hashes', _name):
+            if _cfg.get('hashes', _name) != _hash:
+                _out = False
+                log.info("hashes are !NOT! the same")
+            elif _cfg.get('hashes', _name) == _hash:
+                _out = True
+                log.info("hashes are the same")
+        else:
             _out = False
-            log.info("hashes are !NOT! the same")
-        elif _cfg.get('hashes', _name) == _hash:
-            _out = True
-            log.info("hashes are the same")
+            log.info('missing option')
     else:
         log.critical("section ['hashes'] is missing in solid_config.ini, it is absolutely needed")
         raise configparser.Error("section ['hashes'] does not exist!!")
@@ -143,7 +147,6 @@ def readbin(in_file):
         the decoded file as string
     """
     with open(pathmaker(in_file), 'rb') as binaryfile:
-        log.debug(f"binary file [{in_file}] was read in")
         return binaryfile.read()
 
 
@@ -178,18 +181,18 @@ def readit(in_file, per_lines=False, strip_n=False, in_encoding='utf-8', in_erro
             _output_list.extend(_rfile.readlines())
             if strip_n is True:
                 _output = [item.replace('\n', '') for item in _output_list]
-                log.debug(f"file [{_file}] was read in per line and newline characters stripped")
+
             else:
                 _output = _output_list
-                log.debug(f"file [{_file}] was read in per line")
+
         elif per_lines is False:
             _output_string = _rfile.read()
             if strip_n is True:
                 _output = _output_string.replace('\n', '')
-                log.debug(f"file [{_file}] was read in and newline characters stripped")
+
             else:
                 _output = _output_string
-                log.debug(f"file [{_file}] was read in")
+
     return _output
 
 
@@ -229,7 +232,6 @@ def writebin(in_file, in_data):
         _file = pathmaker(in_file)
     with open(_file, 'wb') as outbinfile:
         outbinfile.write(in_data)
-    log.debug(f"binary data was written to file [{_file}]")
 
 
 # -------------------------------------------------------------- writeit -------------------------------------------------------------- #
@@ -257,10 +259,6 @@ def writeit(in_file, in_data, append=False, in_encoding='utf-8'):
     _in_data = in_data
     with open(_file, _write_type, encoding=in_encoding) as _wfile:
         _wfile.write(_in_data)
-    if _write_type == 'a':
-        log.debug(f"data was appended to file [{_file}]")
-    else:
-        log.debug(f"data was written to file [{_file}]")
 
 
 def appendwriteit(in_file, in_data, in_encoding='utf-8'):
@@ -308,13 +306,12 @@ def pathmaker(first_segment, *in_path_segments, rev=False):
     """
     _first = os.getcwd() if first_segment == 'cwd' else first_segment
     _path = os.path.join(_first, *in_path_segments)
-    _path = os.path.normcase(_path)
     _path = _path.replace('\\\\', '/')
     _path = _path.replace('\\', '/')
     if rev is True:
         _path = _path.replace('/', '\\')
 
-    return _path
+    return _path.strip()
 
 
 # -------------------------------------------------------------- work_in -------------------------------------------------------------- #

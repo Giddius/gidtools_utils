@@ -10,19 +10,19 @@ from pprint import pformat
 # import argparse
 # import datetime
 # import lzma
-# import os
+import os
 # import pyperclip
 # import re
-# import shutil
+import shutil
 # import sqlite3 as sqlite
-# import sys
+import sys
 # import time
 
 # *GID Imports -->
 
 # from gidtools.gidstuff import RandomRGB, not_nempty, time_log
 
-from gidtools.gidfiles.functions import appendwriteit, clearit, linereadit, pathmaker, readit, writeit
+from gidtools.gidfiles.functions import appendwriteit, clearit, linereadit, pathmaker, readit, writeit, writejson, loadjson
 # from gidtools.gidtriumvirate import GiUserConfig, GiSolidConfig, GiDataBase, give_std_repr
 import gidlogger as glog
 
@@ -32,9 +32,12 @@ import gidlogger as glog
 # from PyQt5.QtGui import QIcon, QPixmap, QColor, QBrush, QCursor
 # from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem, QHeaderView, QButtonGroup, QTreeWidgetItemIterator, QMenu
 
+# * Local Imports -->
+
+
 # endregion [Imports]
 
-__updated__ = '2020-08-16 23:42:23'
+__updated__ = '2020-09-21 00:21:29'
 
 
 # region [Logging]
@@ -71,9 +74,15 @@ class QuickFile:
     def __init__(self, always_clear=True):
         self.extension = 'txt'
         self.name = self._check_name()
-        self.path = pathmaker('cwd', self.name)
+        self.path = self._check_path()
         if always_clear is True:
             clearit(self.path)
+
+    def _check_path(self):
+        _folder = pathmaker('cwd', 'quick_files')
+        if os.path.isdir(_folder) is False:
+            os.makedirs(_folder)
+        return pathmaker(_folder, self.name)
 
     def _check_name(self):
         _num = 1
@@ -149,11 +158,8 @@ class QuickFile:
 
 # endregion [Class_9]
 
-
 # region [Main_Exec]
-
 if __name__ == '__main__':
     pass
-
 
 # endregion [Main_Exec]

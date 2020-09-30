@@ -1,7 +1,0 @@
-#! LAST_UPDATED: 2020-08-19 18:26:32
-gidlogger
-gidtools.gidfiles
-gidtools.gidfiles.functions
-gidtools.gidtriumvirate
-pytest
-setuptools

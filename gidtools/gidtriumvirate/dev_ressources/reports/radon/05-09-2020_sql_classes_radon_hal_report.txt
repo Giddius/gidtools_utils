@@ -1,0 +1,13 @@
+sql_classes.py:
+    h1: 8
+    h2: 46
+    N1: 26
+    N2: 52
+    vocabulary: 54
+    length: 78
+    calculated_length: 278.0838499786226
+    volume: 448.8812251687506
+    difficulty: 4.521739130434782
+    effort: 2029.723800763046
+    time: 112.76243337572478
+    bugs: 0.1496270750562502
