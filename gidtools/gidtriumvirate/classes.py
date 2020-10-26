@@ -1,39 +1,19 @@
 # region [Imports]
 
-# * normal imports -->
-# import argparse
-# import contextlib
-# import datetime
-import os
-# import pickle
-# import sys
-# import jinja2
-# import lzma
-# import pyperclip
-# import re
+# * Standard Library Imports -->
 import shutil
-import configparser
-# import time
-from contextlib import contextmanager
-# from pprint import *
 import sqlite3
+import configparser
 from sqlite3 import Error
-# * gid imports -->
+from contextlib import contextmanager
+
+# * Gid Imports -->
 import gidlogger as glog
 import gidtools.gidfiles as gif
 
-# * Qt imports -->
-# from PyQt5 import QtWidgets
-# from PyQt5.QtCore import QSize
-# from PyQt5.QtGui import QIcon, QPixmap
-# from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem
-
-# *Local Imports -->
-
-
 # endregion [Imports]
 
-__updated__ = '2020-08-16 16:28:46'
+__updated__ = '2020-10-14 14:38:55'
 
 # region [Logging]
 

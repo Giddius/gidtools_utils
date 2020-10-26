@@ -1,36 +1,16 @@
 # region [Imports]
 
-
-# *NORMAL Imports -->
-
-# from collections import namedtuple
-# from contextlib import contextmanager
-# from natsort import natsorted
-# from pprint import *
-# import argparse
-# import datetime
-# import jinja2
-# import lzma
+# * Standard Library Imports -->
 import os
-# import pyperclip
-# import re
-# import shutil
-# import sys
-# import time
 
-
-# *GID Imports -->
+# * Gid Imports -->
 import gidlogger as glog
-
-# *QT Imports -->
-
-# *Local Imports -->
-from gidtools.gidconfig.classes import ConfigHandler
 from gidtools.gidconfig.data import Cfg
+from gidtools.gidconfig.classes import ConfigHandler
 
 # endregion [Imports]
 
-__updated__ = '2020-09-23 20:13:55'
+__updated__ = '2020-10-14 14:35:52'
 
 # region [Logging]
 

@@ -1,15 +1,9 @@
 # region [Imports]
 
-# *NORMAL Imports -->
-
-# *GID Imports -->
-# import gidlogger as glog
-
-# *QT Imports -->
 
 # endregion [Imports]
 
-__updated__ = '2020-08-12 13:46:58'
+__updated__ = '2020-10-14 14:37:25'
 
 # region [Localized_Imports]
 

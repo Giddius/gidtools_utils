@@ -1,11 +1,7 @@
 # region [Imports]
 
-# *NORMAL Imports -->
-
-# *GID Imports -->
+# * Gid Imports -->
 import gidlogger as glog
-
-# *QT Imports -->
 
 # endregion [Imports]
 

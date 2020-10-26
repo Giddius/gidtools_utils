@@ -1,18 +1,18 @@
 # region [Imports]
 
-# * normal imports -->
+# * Standard Library Imports -->
 import re
 import random
 from enum import Enum
-# * gid imports -->
+
+# * Gid Imports -->
 import gidlogger as glog
+from gidtools.gidfiles import readit, writeit
 from gidtools.gidtriumvirate import give_std_repr
-from gidtools.gidfiles import writeit, readit
-# * Qt imports -->
 
 # endregion [Imports]
 
-__updated__ = '2020-09-07 02:17:17'
+__updated__ = '2020-10-14 14:38:14'
 
 # region [Logging]
 

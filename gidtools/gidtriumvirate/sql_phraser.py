@@ -1,43 +1,14 @@
 # region [Imports]
 
-# *NORMAL Imports -->
-# from benedict import benedict
-# from collections import namedtuple
-# from contextlib import contextmanager
-# from natsort import natsorted
-# from pprint import *
-# import argparse
-# import datetime
-# import jinja2
-# import lzma
-# import os
-# import pyperclip
-# import re
-# import shutil
-# import sys
-# import time
+# * Standard Library Imports -->
 from enum import Enum, Flag, auto
 
-# *GID Imports -->
-# from gidqtutils.giddialogs import LittlePopuper
-# from gidqtutils.gidgets import DragDropFileLineEdit, DragDropFileListWidget, OneComboInputPopup, OneLineInputPopup, get_icons, open_one_combo_dialog, open_one_line_dialog
-# from gidqtutils.gidqtstuff import as_filedialog, buttongroup_factory, create_new_font, enable_widget_bool, fill_combo_from_db, make_icons, make_icons_stdpath, treewidgeter_simple
-# from gidtools.gidfiles import absolute_listdir, appendwriteit, cascade_rename, clearit, dir_change, ext_splitter, file_name_modifier, file_name_time, file_walker, from_dict_to_file, get_absolute_path, get_pickled, hash_to_solidcfg, ishash_same, limit_amount_of_files, linereadit, number_rename, path_part_remove, pathmaker, pickleit, readbin, readit, splitoff, timenamemaker, work_in, writebin, writeit
-# from gidtools.gidstuff import BaseToFile, CSVToDict, DictToCSVBase, DictToCSVKeyValueRow, DictToCSVValueList, InputError, ListToFile, RandomRGB, dict_selector, dict_to_attr, not_nempty, pydicterer, pylisterer, rec_dict_walker, sepI, sepvar, tab_spacer, time_log, underscore_maker
-# from gidtools.gidtriumvirate import GiDataBase, GiDataBaseMaster, GiSolidConfig, GiUserConfig, GiVariousConfig, GidConfigMaster, GidSQLBuilder, GidSQLPhraser, GidSQLScripter, GidSQLiteDatabaser, GidSQLiteExecutor, RessourceSetUper, give_std_repr
+# * Gid Imports -->
 import gidlogger as glog
-
-# *QT Imports -->
-# from PyQt5 import QtWidgets
-# from PyQt5.QtCore import QSize, Qt
-# from PyQt5.QtGui import QIcon, QPixmap, QColor, QBrush, QCursor
-# from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem, QHeaderView, QButtonGroup, QTreeWidgetItemIterator, QMenu
-
-# *Local Imports -->
 
 # endregion [Imports]
 
-__updated__ = '2020-08-26 00:20:29'
+__updated__ = '2020-10-14 14:39:52'
 
 # region [Logging]
 

@@ -1,37 +1,23 @@
 
-# | TODO: create and 'APPDATA' handler singleton class, that creates, selects, read, and so on to all data taht is saved in appdata, with a dev_option, that redirects the env variable to cwd
 # region [Imports]
 
-
-# *NORMAL Imports -->
-
-# from collections import namedtuple
-# from contextlib import contextmanager
-# from natsort import natsorted
-# from pprint import *
-# import argparse
-from datetime import datetime
-# import jinja2
-# import lzma
+# * Standard Library Imports -->
 import os
-# import pyperclip
-# import re
-# import shutil
-# import sys
-# import time
 import enum
 import configparser
-
-# *GID Imports -->
+from datetime import datetime, timedelta
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
+# * Gid Imports -->
 import gidlogger as glog
-
-# *QT Imports -->
-
-# *Local Imports -->
-
+from typing import Union
 # endregion [Imports]
 
+<<<<<<< Updated upstream
 __updated__ = '2020-09-24 00:54:05'
+=======
+__updated__ = '2020-10-21 04:39:57'
+>>>>>>> Stashed changes
 
 # region [Logging]
 
@@ -116,10 +102,11 @@ class Get(enum.Enum):
 # region [Class_1]
 
 class ConfigHandler(configparser.ConfigParser):
-    def __init__(self, config_file=None, auto_read=True, **kwargs):
+    def __init__(self, config_file=None, auto_read=True, auto_save=True, **kwargs):
         super().__init__(**kwargs)
         self.config_file = '' if config_file is None else config_file
         self.auto_read = auto_read
+        self.auto_save = auto_save
         self._method_select = {Get.basic: self.get, Get.boolean: self.getboolean, Get.int: self.getint, Get.list: self.getlist, Get.path: self.get_path, Get.datetime: self.get_datetime}
 
         if self.auto_read is True:
@@ -152,18 +139,51 @@ class ConfigHandler(configparser.ConfigParser):
             _out = _raw_path.replace(cwd_symbol, os.getcwd()).replace('\\', '/')
         elif '+userdata+' in _raw_path:
             _out = _raw_path.replace('+userdata+', os.getenv('APPDATA')).replace('\\', '/')
+        elif _raw_path == 'notset':
+            _out = None
         else:
             _out = os.path.join(_raw_path).replace('\\', '/')
         return _out
 
+    def _best_fuzzymatch(self, in_term, in_targets: Union[list, set, frozenset, tuple, dict]):
+        # Todo: replace with process.extractOne() from fuzzywuzzy!
+        _rating_list = []
+        for _target in in_targets:
+            _rating_list.append((_target, fuzz.ratio(in_term, _target)))
+        _rating_list.sort(key=lambda x: x[1], reverse=True)
+        log.debug("with a fuzzymatch, the term '%s' was best matched to '%s' with and Levenstein-distance of %s", in_term, _rating_list[0][0], _rating_list[0][1])
+        return _rating_list[0][0]
+
+    def get_timedelta(self, section, key, amount_seperator=' ', delta_seperator=','):
+        _raw_timedelta = self.get(section, key)
+        if _raw_timedelta != 'notset':
+            _raw_timedelta_list = _raw_timedelta.split(delta_seperator)
+            _arg_dict = {'days': 0,
+                         'seconds': 0,
+                         'microseconds': 0,
+                         'milliseconds': 0,
+                         'minutes': 0,
+                         'hours': 0,
+                         'weeks': 0}
+            for raw_delta_data in _raw_timedelta_list:
+                _amount, _typus = raw_delta_data.strip().split(amount_seperator)
+                _key = self._best_fuzzymatch(_typus, _arg_dict)
+                _arg_dict[_key] = float(_amount) if '.' in _amount else int(_amount)
+            return timedelta(**_arg_dict)
+
     def get_datetime(self, section, key, dtformat=None):
         _dtformat = '%Y-%m-%d %H:%M:%S' if dtformat is None else format
         _date_time_string = self.get(section, key)
-        return datetime.strptime(_date_time_string, _dtformat).astimezone()
+        if _date_time_string == "notset":
+            return None
+        else:
+            return datetime.strptime(_date_time_string, _dtformat).astimezone()
 
     def set_datetime(self, section, key, datetime_object, dtformat=None):
         _dtformat = '%Y-%m-%d %H:%M:%S' if dtformat is None else format
         self.set(section, key, datetime_object.strftime(_dtformat))
+        if self.auto_save is True:
+            self.save()
 
     def enum_get(self, section: str, option: str, typus: Get = Get.basic):
         return self._method_select.get(typus, self.get)(section, option)

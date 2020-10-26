@@ -1,3 +1,3 @@
-from .classes import *
 from .data import *
+from .classes import *
 from .functions import *

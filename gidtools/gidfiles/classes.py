@@ -1,43 +1,18 @@
 # region [Imports]
 
-
-# *NORMAL Imports -->
-# from collections import namedtuple
-# from contextlib import contextmanager
-# from jinja2 import Environment, BaseLoader
-# from natsort import natsorted
-from pprint import pformat
-# import argparse
-# import datetime
-# import lzma
+# * Standard Library Imports -->
 import os
-# import pyperclip
-# import re
-import shutil
-# import sqlite3 as sqlite
 import sys
-# import time
+import shutil
+from pprint import pformat
 
-# *GID Imports -->
-
-# from gidtools.gidstuff import RandomRGB, not_nempty, time_log
-
-from gidtools.gidfiles.functions import appendwriteit, clearit, linereadit, pathmaker, readit, writeit, writejson, loadjson
-# from gidtools.gidtriumvirate import GiUserConfig, GiSolidConfig, GiDataBase, give_std_repr
+# * Gid Imports -->
 import gidlogger as glog
-
-# *QT Imports -->
-# from PyQt5 import QtWidgets
-# from PyQt5.QtCore import QSize, Qt
-# from PyQt5.QtGui import QIcon, QPixmap, QColor, QBrush, QCursor
-# from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem, QHeaderView, QButtonGroup, QTreeWidgetItemIterator, QMenu
-
-# * Local Imports -->
-
+from gidtools.gidfiles.functions import readit, clearit, writeit, loadjson, pathmaker, writejson, linereadit, appendwriteit
 
 # endregion [Imports]
 
-__updated__ = '2020-09-21 00:21:29'
+__updated__ = '2020-10-14 14:36:29'
 
 
 # region [Logging]

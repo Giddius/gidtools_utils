@@ -1,4 +1,5 @@
 # region [Imports]
+<<<<<<< Updated upstream
 
 
 # *NORMAL Imports -->
@@ -10,12 +11,13 @@ from pprint import pformat
 # import argparse
 # import datetime
 # import lzma
+=======
+import appdirs
+# * Standard Library Imports -->
+>>>>>>> Stashed changes
 import os
-# import pyperclip
-# import re
-import shutil
-# import sqlite3 as sqlite
 import sys
+<<<<<<< Updated upstream
 # import time
 
 # *GID Imports -->
@@ -24,20 +26,21 @@ import sys
 
 from gidtools.gidfiles.functions import appendwriteit, linereadit, pathmaker, readit, writeit, writejson, loadjson
 # from gidtools.gidtriumvirate import GiUserConfig, GiSolidConfig, GiDataBase, give_std_repr
+=======
+import shutil
+
+# * Gid Imports -->
+>>>>>>> Stashed changes
 import gidlogger as glog
-
-# *QT Imports -->
-# from PyQt5 import QtWidgets
-# from PyQt5.QtCore import QSize, Qt
-# from PyQt5.QtGui import QIcon, QPixmap, QColor, QBrush, QCursor
-# from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem, QHeaderView, QButtonGroup, QTreeWidgetItemIterator, QMenu
-
-# * Local Imports -->
 from gidtools.gidconfig import Cfg, ConfigRental
 
 # endregion [Imports]
 
+<<<<<<< Updated upstream
 __updated__ = '2020-09-27 18:48:21'
+=======
+__updated__ = '2020-10-14 18:07:08'
+>>>>>>> Stashed changes
 
 
 # region [Logging]
@@ -84,6 +87,7 @@ class AppDataStorageUtility:
         self.operating_system = sys.platform
         self.general_data_folder = None if self.dev is None else os.path.split(self.dev)[0]
         self.appstorage_folder = None if self.dev is None else self.dev
+        self.log_folder = None if self.dev is None else pathmaker(self.dev, 'Logs')
         if self.dev is None:
             self.setup_app_storage_base()
             self.find_general_data_folder()
@@ -94,19 +98,18 @@ class AppDataStorageUtility:
 
     def setup_app_storage_base(self):
         self.find_general_data_folder()
-        self.appstorage_folder = pathmaker(self.general_data_folder, self.author_name, self.app_name)
+        self.appstorage_folder = pathmaker(appdirs.user_data_dir(appauthor=self.author_name, appname=self.app_name, roaming=True))
         if os.path.isdir(self.appstorage_folder) is False:
             os.makedirs(self.appstorage_folder)
+        self.log_folder = pathmaker(appdirs.user_log_dir(appauthor=self.author_name, appname=self.app_name, opinion=True))
+        if os.path.isdir(self.log_folder) is False:
+            os.makedirs(self.log_folder)
 
     def find_general_data_folder(self):
         if self.redirect is not None:
             self.general_data_folder = pathmaker(self.redirect)
-        elif self.operating_system.startswith('win32'):
-            self.general_data_folder = os.getenv('APPDATA')
-        elif self.operating_system.startswith('linux'):
-            self.general_data_folder = os.getenv('XDG_CONFIG_HOME')
-        elif self.operating_system.startswith('darwin'):
-            raise FileNotFoundError('currently not available for MacOS')
+        else:
+            self.general_data_folder = pathmaker(appdirs.user_data_dir(roaming=True))
 
     def add_folder(self, folder_name, parent_folder=None):
         if parent_folder is None:

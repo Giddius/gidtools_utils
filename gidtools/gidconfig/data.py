@@ -1,34 +1,14 @@
 # region [Imports]
 
+# * Standard Library Imports -->
+from enum import Enum, Flag, auto
 
-# *NORMAL Imports -->
-
-# from collections import namedtuple
-# from contextlib import contextmanager
-# from natsort import natsorted
-# from pprint import *
-# import argparse
-# import datetime
-# import jinja2
-# import lzma
-# import os
-# import pyperclip
-# import re
-# import shutil
-# import sys
-# import time
-from enum import Enum, auto, Flag
-# *GID Imports -->
-# from gidtools.gidfiles import absolute_listdir, appendwriteit, cascade_rename, clearit, dir_change, ext_splitter, file_name_modifier, file_name_time, file_walker, from_dict_to_file, get_absolute_path, get_pickled, hash_to_solidcfg, ishash_same, limit_amount_of_files, linereadit, number_rename, path_part_remove, pathmaker, pickleit, readbin, readit, splitoff, timenamemaker, work_in, writebin, writeit
+# * Gid Imports -->
 import gidlogger as glog
-
-# *QT Imports -->
-
-# *Local Imports -->
 
 # endregion [Imports]
 
-__updated__ = '2020-09-21 02:37:57'
+__updated__ = '2020-10-14 14:35:36'
 
 # region [Logging]
 

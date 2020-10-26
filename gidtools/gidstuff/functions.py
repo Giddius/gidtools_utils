@@ -1,19 +1,12 @@
 # region [Imports]
 
-# * normal imports -->
-# import argparse
-# import contextlib
-# import datetime
-# import jinja2
-# import lzma
-# import pyperclip
-# import re
-# import shutil
-from gidtools.gidfiles.functions import readit, writeit
+# * Standard Library Imports -->
+import os
+import sys
 import time
 import timeit
-import matplotlib.pyplot as plt
 import statistics
+<<<<<<< Updated upstream
 # import os
 # import sys
 # from contextlib import contextmanager
@@ -21,18 +14,22 @@ import statistics
 # from pprint import *
 
 # * gid imports -->
+=======
+import subprocess
+
+# * Gid Imports -->
+>>>>>>> Stashed changes
 import gidlogger as glog
 from gidtools.gidfiles import pathmaker
-
-# * Qt imports -->
-# from PyQt5 import QtWidgets
-# from PyQt5.QtCore import QSize
-# from PyQt5.QtGui import QIcon, QPixmap
-# from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem
+from gidtools.gidfiles.functions import readit, writeit
 
 # endregion [Imports]
 
+<<<<<<< Updated upstream
 __updated__ = '2020-09-14 21:37:31'
+=======
+__updated__ = '2020-10-14 14:38:38'
+>>>>>>> Stashed changes
 
 # region [Logging]
 
@@ -211,7 +208,7 @@ def rec_dict_walker(value, key=None):
 # endregion [Functions_10]
 
 
-def timeit_runner(func, repeat=1, graph='scatter'):
+def timeit_runner(func, repeat=1):
     _graph_data = []
     _value_list = []
     timeit_object = timeit.Timer(func)
@@ -222,12 +219,6 @@ def timeit_runner(func, repeat=1, graph='scatter'):
     print(f"Mean: {round(statistics.mean(_value_list),2)}")
     print(f"Median: {round(statistics.median(_value_list),2)}")
     print(f"Std Dev: {round(statistics.stdev(_value_list),2)}")
-    x, y = zip(*_graph_data)
-    if graph == 'scatter':
-        plt.scatter(x, y)
-    elif graph == 'plot':
-        plt.plot(x, y)
-    plt.show()
 
 
 # region [Main_Exec]

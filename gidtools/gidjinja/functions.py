@@ -1,38 +1,9 @@
 # region [Imports]
 
 
-# *NORMAL Imports -->
-# from collections import namedtuple
-# from contextlib import contextmanager
-# from jinja2 import Environment, BaseLoader
-# from natsort import natsorted
-# from pprint import *
-# import argparse
-# import datetime
-# import lzma
-# import os
-# import pyperclip
-# import re
-# import shutil
-# import sqlite3 as sqlite
-# import sys
-# import time
-
-# *GID Imports -->
-# from gidtools.gidfiles import pathmaker, writeit, readit, clearit, pickleit, get_pickled, ext_splitter, splitoff
-# from gidtools.gidstuff import RandomRGB, not_nempty, time_log
-# from gidtools.gidtriumvirate import GiUserConfig, GiSolidConfig, GiDataBase, give_std_repr
-# import gidlogger as glog
-
-# *QT Imports -->
-# from PyQt5 import QtWidgets
-# from PyQt5.QtCore import QSize, Qt
-# from PyQt5.QtGui import QIcon, QPixmap, QColor, QBrush, QCursor
-# from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem, QHeaderView, QButtonGroup, QTreeWidgetItemIterator, QMenu
-
 # endregion [Imports]
 
-__updated__ = '2020-08-12 13:46:22'
+__updated__ = '2020-10-14 14:37:10'
 
 # region [Localized_Imports]
 

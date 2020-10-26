@@ -1,34 +1,19 @@
 # region [Imports]
 
-
-# *NORMAL Imports -->
-# from collections import namedtuple
-from sqlite3.dbapi2 import Error
-# from natsort import natsorted
-# import argparse
-# import datetime
-# import lzma
+# * Standard Library Imports -->
 import os
-# import pyperclip
 import shutil
 import sqlite3 as sqlite
-# import time
 import configparser
-# *GID Imports -->
-from gidtools.gidfiles import cascade_rename, ext_splitter, pathmaker, readit, splitoff, writeit
+from sqlite3.dbapi2 import Error
 
+# * Gid Imports -->
 import gidlogger as glog
+from gidtools.gidfiles import readit, writeit, splitoff, pathmaker, ext_splitter, cascade_rename
 
-# *QT Imports -->
-# from PyQt5 import QtWidgets
-# from PyQt5.QtCore import QSize, Qt
-# from PyQt5.QtGui import QIcon, QPixmap, QColor, QBrush, QCursor
-# from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem, QHeaderView, QButtonGroup, QTreeWidgetItemIterator, QMenu
-
-# *Local Imports -->
 # endregion [Imports]
 
-__updated__ = '2020-09-15 20:30:54'
+__updated__ = '2020-10-14 14:39:37'
 
 # region [Localized_Imports]
 

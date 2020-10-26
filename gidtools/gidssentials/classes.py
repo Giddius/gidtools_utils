@@ -1,26 +1,9 @@
 # region [Imports]
 
 
-# *NORMAL Imports -->
-
-# *GID Imports -->
-# from gidtools.gidfiles import pathmaker, writeit, readit, clearit, pickleit, get_pickled, ext_splitter, splitoff, dir_change
-# from gidtools.gidstuff import RandomRGB, not_nempty, time_log
-# from gidtools.gidtriumvirate import give_std_repr
-# import gidlogger as glog
-
-# *QT Imports -->
-# from PyQt5 import QtWidgets
-# from PyQt5.QtCore import QSize, Qt
-# from PyQt5.QtGui import QIcon, QPixmap, QColor, QBrush, QCursor
-# from PyQt5.QtWidgets import QDialog, QFileDialog, QMessageBox, QTreeWidgetItem, QListWidgetItem, QHeaderView, QButtonGroup, QTreeWidgetItemIterator, QMenu
-
-# *Local Imports -->
-
-
 # endregion [Imports]
 
-__updated__ = '2020-08-12 13:46:43'
+__updated__ = '2020-10-14 14:37:20'
 
 
 # region [Logging]

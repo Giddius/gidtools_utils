@@ -1,17 +1,11 @@
 # region [Imports]
 
-# *NORMAL Imports -->
-from enum import Flag, auto, Enum
-
-
-# *GID Imports -->
-# import gidlogger as glog
-
-# *QT Imports -->
+# * Standard Library Imports -->
+from enum import Enum, Flag, auto
 
 # endregion [Imports]
 
-__updated__ = '2020-09-07 20:00:43'
+__updated__ = '2020-10-14 14:35:02'
 
 
 # region [Logging]

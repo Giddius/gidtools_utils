@@ -1,5 +1,6 @@
 # region [Imports]
 
+<<<<<<< Updated upstream
 
 # *NORMAL Imports -->
 
@@ -17,20 +18,20 @@ import os
 import shutil
 import sys
 # import time
+=======
+# * Standard Library Imports -->
+>>>>>>> Stashed changes
 import zipfile
-
-# *GID Imports -->
+import os
+import base64
+# * Gid Imports -->
 import gidlogger as glog
-
-# *QT Imports -->
-
-# *Local Imports -->
-from gidtools.gidconfig import ConfigHandler, Cfg, ConfigRental
-
+from gidtools.gidconfig import Cfg, ConfigRental, ConfigHandler
 from gidtools.gidappdata.classes import AppDataStorageUtility
+
 # endregion [Imports]
 
-__updated__ = '2020-09-25 20:12:15'
+__updated__ = '2020-10-21 06:44:13'
 
 # region [Logging]
 
@@ -131,9 +132,11 @@ class AppdataFactory:
         return cls.handler
 
     @classmethod
-    def archive_from_bin(cls, bin_data: str, name: str = 'user_data_archive', ext: str = 'zip'):
+    def archive_from_bin(cls, bin_data: str, name: str = 'user_data_archive', ext: str = 'zip', uses_base64: bool = False):
         _file = pathmaker(str(cls.handler), name + '.' + ext)
         with open(_file, 'wb') as archfile:
+            if uses_base64 is True:
+                bin_data = base64.b64decode(bin_data)
             archfile.write(bin_data)
         return _file
 
@@ -144,12 +147,12 @@ class AppdataFactory:
             os.remove(in_archive_file)
 
     @classmethod
-    def setup_from_binarchive(cls, author_name: str, app_name: str, in_archive: str, dev=None, redirect=None, clean=True):
+    def setup_from_binarchive(cls, author_name: str, app_name: str, in_archive: str, uses_base64: bool, dev=None, redirect=None, clean=True):
 
         if cls.handler is None:
             log.info("appdata, does not exist, creating from scratch")
             cls.handler = AppDataStorageUtility(author_name, app_name, dev, redirect)
-            _archive = cls.archive_from_bin(in_archive)
+            _archive = cls.archive_from_bin(in_archive, uses_base64=uses_base64)
             cls.unpack_archive(_archive, clean=clean)
             ConfigRental.set_appdata(cls.handler)
         else:

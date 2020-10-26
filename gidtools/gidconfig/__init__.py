@@ -1,4 +1,4 @@
-from .classes import *
 from .data import *
-from .functions import *
+from .classes import *
 from .factories import *
+from .functions import *

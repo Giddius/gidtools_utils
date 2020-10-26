@@ -1,25 +1,26 @@
 # region [Imports]
 
-# * normal imports -->
-import datetime
+# * Standard Library Imports -->
 import os
+import json
 import pickle
 import shutil
-from contextlib import contextmanager
-from pprint import pformat
-import configparser
 import hashlib
-import json
-# * gid imports -->
+import datetime
+import configparser
+from pprint import pformat
+from contextlib import contextmanager
+
+# * Gid Imports -->
 import gidlogger as glog
-
-# * Qt imports -->
-# *Local Imports -->
-
 
 # endregion [Imports]
 
+<<<<<<< Updated upstream
 __updated__ = '2020-09-14 20:03:35'
+=======
+__updated__ = '2020-10-25 12:58:51'
+>>>>>>> Stashed changes
 
 # region [Logging]
 
@@ -150,9 +151,7 @@ def readbin(in_file):
         return binaryfile.read()
 
 
-# -------------------------------------------------------------- readit -------------------------------------------------------------- #
-def readit(in_file, per_lines=False, strip_n=False, in_encoding='utf-8', in_errors='strict'):
-    # -------------------------------------------------------------- readit -------------------------------------------------------------- #
+def readit(in_file, per_lines=False, in_encoding='utf-8', in_errors=None):
     """
     Reads a file.
 
@@ -162,8 +161,6 @@ def readit(in_file, per_lines=False, strip_n=False, in_encoding='utf-8', in_erro
         A file path
     per_lines : bool, optional
         If True, returns a list of all lines, by default False
-    strip_n : bool, optional
-        If True remove the newline marker from the string, by default False
     in_encoding : str, optional
         Sets the encoding, by default 'utf-8'
     in_errors : str, optional
@@ -171,29 +168,15 @@ def readit(in_file, per_lines=False, strip_n=False, in_encoding='utf-8', in_erro
 
     Returns
     -------
-    str
-        the read in file as string
+    str/list
+        the read in file as string or list (if per_lines is True)
     """
-    _file = in_file
-    _output_list = []
-    with open(_file, 'r', encoding=in_encoding, errors=in_errors) as _rfile:
-        if per_lines is True:
-            _output_list.extend(_rfile.readlines())
-            if strip_n is True:
-                _output = [item.replace('\n', '') for item in _output_list]
+    with open(in_file, 'r', encoding=in_encoding, errors=in_errors) as _rfile:
+        _content = _rfile.read()
+    if per_lines is True:
+        _content = _content.splitlines()
 
-            else:
-                _output = _output_list
-
-        elif per_lines is False:
-            _output_string = _rfile.read()
-            if strip_n is True:
-                _output = _output_string.replace('\n', '')
-
-            else:
-                _output = _output_string
-
-    return _output
+    return _content
 
 
 def linereadit(in_file, in_encoding='utf-8', in_errors='strict'):
@@ -226,17 +209,11 @@ def writebin(in_file, in_data):
     in_data : str
         The data to write
     """
-    if isinstance(in_file, (tuple, list)):
-        _file = pathmaker(*in_file)
-    elif isinstance(in_file, str):
-        _file = pathmaker(in_file)
-    with open(_file, 'wb') as outbinfile:
+    with open(in_file, 'wb') as outbinfile:
         outbinfile.write(in_data)
 
 
-# -------------------------------------------------------------- writeit -------------------------------------------------------------- #
-def writeit(in_file, in_data, append=False, in_encoding='utf-8'):
-    # -------------------------------------------------------------- writeit -------------------------------------------------------------- #
+def writeit(in_file, in_data, append=False, in_encoding='utf-8', in_errors=None):
     """
     Writes to a file.
 
@@ -251,14 +228,9 @@ def writeit(in_file, in_data, append=False, in_encoding='utf-8'):
     in_encoding : str, optional
         Sets the encoding, by default 'utf-8'
     """
-    if isinstance(in_file, (tuple, list)):
-        _file = pathmaker(*in_file)
-    elif isinstance(in_file, str):
-        _file = pathmaker(in_file)
     _write_type = 'w' if append is False else 'a'
-    _in_data = in_data
-    with open(_file, _write_type, encoding=in_encoding) as _wfile:
-        _wfile.write(_in_data)
+    with open(in_file, _write_type, encoding=in_encoding, errors=in_errors,) as _wfile:
+        _wfile.write(in_data)
 
 
 def appendwriteit(in_file, in_data, in_encoding='utf-8'):
@@ -277,8 +249,9 @@ def clearit(in_file):
     in_file : str
         The target file path
     """
-    writeit(pathmaker(in_file), '')
-    log.debug(f"contents of file [{in_file}] was deleted")
+    with open(in_file, 'w') as file_to_clear:
+        file_to_clear.write('')
+    log.debug(f"contents of file '{in_file}' was cleared")
 
 
 # endregion [Functions_Write]
@@ -286,9 +259,8 @@ def clearit(in_file):
 
 # region [Functions_Paths]
 
-# -------------------------------------------------------------- pathmaker -------------------------------------------------------------- #
+
 def pathmaker(first_segment, *in_path_segments, rev=False):
-    # -------------------------------------------------------------- pathmaker -------------------------------------------------------------- #
     """
     Normalizes input path or path fragments, replaces '\\\\' with '/' and combines fragments.
 
@@ -441,9 +413,7 @@ def file_name_time(var_sep='_', date_time_sep='-', box=('[', ']')):
     return _output
 
 
-# -------------------------------------------------------------- number_rename -------------------------------------------------------------- #
 def number_rename(in_file_name, in_round=1):
-    # -------------------------------------------------------------- number_rename -------------------------------------------------------------- #
     """
     Appends a number to a file name if it already exists, increases the number and checks again.
 
@@ -499,9 +469,7 @@ def cascade_rename(in_file_name, in_folder, in_max_files=3):
     return pathmaker(in_folder, _temp_file_dict[str(0)])
 
 
-# -------------------------------------------------------------- exist_handle -------------------------------------------------------------- #
 def _exist_handle(in_path, in_round, original_path):
-    # -------------------------------------------------------------- exist_handle -------------------------------------------------------------- #
     """
     internal use for the "number_rename" function.
     """

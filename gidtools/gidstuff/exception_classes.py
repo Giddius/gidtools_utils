@@ -18,3 +18,6 @@ class InputError(Exception):
         except KeyError:
             _out = "Generic Input Error with "
         return _out
+
+
+raise InputError('test')

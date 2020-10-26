@@ -1,0 +1,3 @@
+graft gidtools
+prune gidtools/dev_ressources
+prune gidtools/logs
