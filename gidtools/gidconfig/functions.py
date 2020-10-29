@@ -2,7 +2,7 @@
 
 # * Standard Library Imports -->
 import os
-<<<<<<< Updated upstream
+
 # import pyperclip
 # import re
 # import shutil
@@ -11,19 +11,13 @@ import os
 
 # *GID Imports -->
 from gidtools.gidfiles.functions import pathmaker, writeit
-=======
+
 
 # * Gid Imports -->
->>>>>>> Stashed changes
+
 import gidlogger as glog
 
 # endregion [Imports]
-
-<<<<<<< Updated upstream
-__updated__ = '2020-09-21 00:17:32'
-=======
-__updated__ = '2020-10-14 14:36:03'
->>>>>>> Stashed changes
 
 # region [Logging]
 

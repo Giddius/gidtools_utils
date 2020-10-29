@@ -1,5 +1,4 @@
 # region [Imports]
-<<<<<<< Updated upstream
 
 
 # *NORMAL Imports -->
@@ -11,13 +10,8 @@ from pprint import pformat
 # import argparse
 # import datetime
 # import lzma
-=======
-import appdirs
-# * Standard Library Imports -->
->>>>>>> Stashed changes
 import os
 import sys
-<<<<<<< Updated upstream
 # import time
 
 # *GID Imports -->
@@ -26,21 +20,12 @@ import sys
 
 from gidtools.gidfiles.functions import appendwriteit, linereadit, pathmaker, readit, writeit, writejson, loadjson
 # from gidtools.gidtriumvirate import GiUserConfig, GiSolidConfig, GiDataBase, give_std_repr
-=======
-import shutil
-
-# * Gid Imports -->
->>>>>>> Stashed changes
 import gidlogger as glog
 from gidtools.gidconfig import Cfg, ConfigRental
 
 # endregion [Imports]
 
-<<<<<<< Updated upstream
-__updated__ = '2020-09-27 18:48:21'
-=======
-__updated__ = '2020-10-14 18:07:08'
->>>>>>> Stashed changes
+__updated__ = '2020-10-27 05:06:28'
 
 
 # region [Logging]

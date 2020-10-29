@@ -84,4 +84,5 @@ def convert_and_replace_to_toml(in_list):
 
 
 if __name__ == '__main__':
+    convert(True)
     convert(False)

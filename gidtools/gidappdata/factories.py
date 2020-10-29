@@ -1,6 +1,5 @@
 # region [Imports]
 
-<<<<<<< Updated upstream
 
 # *NORMAL Imports -->
 
@@ -18,9 +17,6 @@ import os
 import shutil
 import sys
 # import time
-=======
-# * Standard Library Imports -->
->>>>>>> Stashed changes
 import zipfile
 import os
 import base64
@@ -31,7 +27,7 @@ from gidtools.gidappdata.classes import AppDataStorageUtility
 
 # endregion [Imports]
 
-__updated__ = '2020-10-21 06:44:13'
+__updated__ = '2020-10-27 05:06:37'
 
 # region [Logging]
 

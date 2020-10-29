@@ -13,11 +13,6 @@ import gidlogger as glog
 from typing import Union
 # endregion [Imports]
 
-<<<<<<< Updated upstream
-__updated__ = '2020-09-24 00:54:05'
-=======
-__updated__ = '2020-10-21 04:39:57'
->>>>>>> Stashed changes
 
 # region [Logging]
 
@@ -103,7 +98,7 @@ class Get(enum.Enum):
 
 class ConfigHandler(configparser.ConfigParser):
     def __init__(self, config_file=None, auto_read=True, auto_save=True, **kwargs):
-        super().__init__(**kwargs)
+        super().__init__(**kwargs, allow_no_value=True)
         self.config_file = '' if config_file is None else config_file
         self.auto_read = auto_read
         self.auto_save = auto_save

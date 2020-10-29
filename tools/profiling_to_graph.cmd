@@ -1,5 +1,6 @@
 @rem taskarg: ${file}
 @Echo off
+call pssuspend64 Dropbox
 set OLDHOME_FOLDER=%~dp0
 set PATH_GRAPHVIZ="C:\Program Files (x86)\Graphviz2.38\bin\dot.exe"
 pushd %OLDHOME_FOLDER%
@@ -36,3 +37,4 @@ call gprof2dot.exe -f pstats %INFILEBASE%_graph.pstats | %PATH_GRAPHVIZ% -Tsvg -
 DEL %INFILEBASE%_graph.pstats
 echo finished
 
+call pssuspend64 Dropbox -r

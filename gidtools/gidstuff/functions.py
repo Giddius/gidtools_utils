@@ -6,7 +6,7 @@ import sys
 import time
 import timeit
 import statistics
-<<<<<<< Updated upstream
+import subprocess
 # import os
 # import sys
 # from contextlib import contextmanager
@@ -14,22 +14,13 @@ import statistics
 # from pprint import *
 
 # * gid imports -->
-=======
-import subprocess
-
-# * Gid Imports -->
->>>>>>> Stashed changes
 import gidlogger as glog
 from gidtools.gidfiles import pathmaker
 from gidtools.gidfiles.functions import readit, writeit
 
 # endregion [Imports]
 
-<<<<<<< Updated upstream
-__updated__ = '2020-09-14 21:37:31'
-=======
-__updated__ = '2020-10-14 14:38:38'
->>>>>>> Stashed changes
+__updated__ = '2020-10-27 05:16:55'
 
 # region [Logging]
 
@@ -219,6 +210,19 @@ def timeit_runner(func, repeat=1):
     print(f"Mean: {round(statistics.mean(_value_list),2)}")
     print(f"Median: {round(statistics.median(_value_list),2)}")
     print(f"Std Dev: {round(statistics.stdev(_value_list),2)}")
+
+
+def open_explore(in_path):
+    filebrowser_path = os.path.join(os.getenv('WINDIR'), 'explorer.exe')
+
+    path = os.path.normpath(in_path)
+
+    if os.path.isdir(path):
+        subprocess.run([filebrowser_path, path], check=False)
+    elif os.path.isfile(path):
+        subprocess.run([filebrowser_path, '/select,', os.path.normpath(path)], check=False)
+    else:
+        raise FileExistsError('in_path is not an directory and also not an file')
 
 
 # region [Main_Exec]

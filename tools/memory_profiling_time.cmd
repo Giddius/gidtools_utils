@@ -1,6 +1,6 @@
 @rem taskarg: ${file}
 @Echo off
-
+call pssuspend64 Dropbox
 set OLDHOME_FOLDER=%~dp0
 
 pushd %OLDHOME_FOLDER%
@@ -56,3 +56,4 @@ rem call pip uninstall -q -y pyparsing
 rem call pip uninstall -q -y python-dateutil
 rem call pip uninstall -q -y six
 
+call pssuspend64 Dropbox -r

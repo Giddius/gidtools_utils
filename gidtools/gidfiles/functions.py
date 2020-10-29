@@ -16,11 +16,6 @@ import gidlogger as glog
 
 # endregion [Imports]
 
-<<<<<<< Updated upstream
-__updated__ = '2020-09-14 20:03:35'
-=======
-__updated__ = '2020-10-25 12:58:51'
->>>>>>> Stashed changes
 
 # region [Logging]
 
@@ -51,7 +46,9 @@ def loadjson(in_file):
 
 
 def writejson(in_object, in_file, sort_keys=True, indent=0):
-    writeit(in_file, json.dumps(in_object, sort_keys=sort_keys, indent=indent))
+    with open(in_file, 'w') as jsonoutfile:
+        json.dump(in_object, jsonoutfile, sort_keys=sort_keys, indent=indent)
+
 
 # endregion [Function_JSON]
 
@@ -304,6 +301,7 @@ def work_in(in_dir):
     log.debug(f"starting to work in directory [{in_dir}]")
     yield
     log.debug(f"stopped to work in directory [{in_dir}] and returned to directory [{prev_cwd}]")
+    os.chdir(prev_cwd)
 
 
 # -------------------------------------------------------------- path_part_remove -------------------------------------------------------------- #

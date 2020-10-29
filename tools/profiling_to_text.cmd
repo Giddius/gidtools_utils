@@ -1,5 +1,5 @@
 @rem taskarg: ${file}
-
+call pssuspend64 Dropbox
 @Echo off
 set OLDHOME_FOLDER=%~dp0
 pushd %OLDHOME_FOLDER%
@@ -31,3 +31,4 @@ python -m cProfile -s cumtime %INFILE% > %WORKSPACEDIR_BATCH%\misc\text_profilin
 
 
 
+call pssuspend64 Dropbox -r
