@@ -14,19 +14,6 @@ GID_TOOLS_REQUIREMENTS_FILE = 'requirements.txt'
 # endregion[Constants]
 
 
-def get_dependencies():
-    # sourcery skip: inline-immediately-returned-variable, list-comprehension
-    _out = []
-    if os.path.isfile(GID_TOOLS_REQUIREMENTS_FILE) is True:
-        with open(GID_TOOLS_REQUIREMENTS_FILE, 'r', errors='replace') as fileobject:
-            _temp_list = fileobject.read().splitlines()
-
-        for line in _temp_list:
-            if line != '' and line.startswith('#') is False:
-                _out.append(line)
-    return _out
-
-
 def get_long_description_type():
     _type_dict = {
         'md': 'text/markdown',
@@ -76,7 +63,13 @@ setup(name='gidtools',
       author=get_author(),
       license=get_license(),
       packages=find_packages(),
-      install_requires=get_dependencies(),
+      install_requires=["fuzzywuzzy>=0.18.0",
+                        "gidlogger>=0.1.1",
+                        "Jinja2>=2.11.2",
+                        "MarkupSafe>=1.1.1",
+                        "python-dotenv>=0.15.0",
+                        "python-Levenshtein>=0.12.0",
+                        ],
       include_package_data=True,
       entry_points=get_entry_points(),
       options={"bdist_wheel": {"universal": True}}
