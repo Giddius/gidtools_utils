@@ -22,10 +22,10 @@ from gidtools.gidfiles.functions import appendwriteit, linereadit, pathmaker, re
 # from gidtools.gidtriumvirate import GiUserConfig, GiSolidConfig, GiDataBase, give_std_repr
 import gidlogger as glog
 from gidtools.gidconfig import Cfg, ConfigRental
-
+import appdirs
 # endregion [Imports]
 
-__updated__ = '2020-10-27 05:06:28'
+__updated__ = '2020-10-31 07:40:46'
 
 
 # region [Logging]

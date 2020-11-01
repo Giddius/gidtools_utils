@@ -24,10 +24,10 @@ import base64
 import gidlogger as glog
 from gidtools.gidconfig import Cfg, ConfigRental, ConfigHandler
 from gidtools.gidappdata.classes import AppDataStorageUtility
-
+import appdirs
 # endregion [Imports]
 
-__updated__ = '2020-10-27 05:06:37'
+__updated__ = '2020-10-31 07:40:54'
 
 # region [Logging]
 

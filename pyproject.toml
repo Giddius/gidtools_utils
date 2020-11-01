@@ -8,12 +8,12 @@ author = "Giddius"
 classifiers = ["License :: OSI Approved :: MIT License"]
 description-file = "README.md"
 requires = [
-	"fuzzywuzzy==0.18.0",
-	"gidlogger==0.1.1",
-	"Jinja2==2.11.2",
-	"MarkupSafe==1.1.1",
-	"python-dotenv==0.15.0",
-	"python-Levenshtein==0.12.0",
+	"fuzzywuzzy>=0.18.0",
+	"gidlogger>=0.1.1",
+	"Jinja2>=2.11.2",
+	"MarkupSafe>=1.1.1",
+	"python-dotenv>=0.15.0",
+	"python-Levenshtein>=0.12.0",
 ]
 
 
