@@ -64,12 +64,11 @@ log.info(glog.imported(__name__))
 
 class GidSqlitePhraser:
     def __init__(self):
-        self.standard_phrases = {}
-        self.extra_phrase = {}
-        self.templates = {}
+        self.template_folder = None
+        self.created_scripts = {}
+
 
 # region[Main_Exec]
-
 
 if __name__ == '__main__':
     pass

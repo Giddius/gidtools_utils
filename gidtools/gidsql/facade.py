@@ -49,10 +49,12 @@ import gidlogger as glog
 from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loadjson, pickleit, writebin, pathmaker, writejson,
                                dir_change, linereadit, get_pickled, ext_splitter, appendwriteit, create_folder, from_dict_to_file)
 
-
+from gidtools.gidsql.db_writer import GidSQLiteWriter
+from gidtools.gidsql.db_reader import GidSqliteReader
+from gidtools.gidsql.script_handling import GidSqliteScriptProvider
 # endregion[Imports]
 
-__updated__ = '2020-11-02 21:52:37'
+__updated__ = '2020-11-22 10:35:46'
 
 # region [AppUserData]
 
@@ -66,13 +68,37 @@ log.info(glog.imported(__name__))
 # endregion[Logging]
 
 # region [Constants]
-
+THIS_FILE_DIR = os.path.abspath(os.path.dirname(__file__))
 # endregion[Constants]
 
 
+class GidSqliteDatabase:
+    def __init__(self, db_location, script_location, config=None):
+        self.path = db_location
+        self.config = config
+        self.pragmas = None
+        if self.config is not None:
+            self.pragmas = self.config.getlist('general_settings', 'pragmas')
+        self.writer = GidSQLiteWriter(db_location, self.pragmas)
+        self.reader = GidSqliteReader(db_location, self.pragmas)
+        self.scripter = GidSqliteScriptProvider(script_location)
+        self.config = config
+
+    def startup_db(self, overwrite=False):
+        if os.path.exists(self.path) is True and overwrite is False:
+            return None
+        else:
+            os.remove(self.path)
+            for script in self.scripter.setup_scripts:
+                self.writer.write(script)
+
 # region[Main_Exec]
 
-if __name__ == '__main__':
-    pass
 
+if __name__ == '__main__':
+    # x = GidSqliteDatabase(pathmaker(THIS_FILE_DIR, "test_db.db"), r"D:\Dropbox\hobby\Modding\Programs\Github\My_Repos\gidtools_utils\tests\test_gidsql")
+    # x.startup_db()
+    # # x.writer.write('INSERT INTO "main_tbl" ("name", "info") VALUES (?,?)', ("first_name", "first_info"))
+    # print(x.reader.query('SELECT * FROM main_tbl'))
+    pass
 # endregion[Main_Exec]

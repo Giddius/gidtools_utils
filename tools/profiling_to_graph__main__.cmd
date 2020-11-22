@@ -2,5 +2,5 @@
 @Echo off
 set OLDHOME_FOLDER=%~dp0
 pushd %OLDHOME_FOLDER%
-call .\activate_with_vars.bat
-call profiling_to_graph.cmd %MAIN_SCRIPT_FILE%
+call ..\.venv\Scripts\activate.bat
+call profiling_to_graph.cmd D:\Dropbox\hobby\Modding\Programs\Github\My_Repos\gidtools_utils\gidtools\gidconfig\experimental.py

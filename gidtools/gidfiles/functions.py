@@ -106,25 +106,12 @@ def ishash_same(in_file, in_name=None, in_config_loc='default'):
 # region [Functions_Unsorted]
 
 
-def absolute_listdir(in_dir, in_filter=None, in_filter_type=True):
-    for files in os.listdir(in_dir):
-        if in_filter is not None:
-            if in_filter_type is True:
-                if in_filter in files:
-                    yield pathmaker(in_dir, files)
-            elif in_filter_type is False:
-                if in_filter not in files:
-                    yield pathmaker(in_dir, files)
-        else:
-            yield pathmaker(in_dir, files)
-
 # endregion [Functions_Unsorted]
 
 # region [Functions_Delete]
 
 
 # endregion [Functions_Delete]
-
 
 # region [Functions_Read]
 
@@ -614,9 +601,8 @@ def file_name_modifier(in_path, in_string, pos='prefix', new_ext=None, seperator
 
 # region [Functions_Pickle]
 
-# -------------------------------------------------------------- pickleit -------------------------------------------------------------- #
+
 def pickleit(obj, in_path):
-    # -------------------------------------------------------------- pickleit -------------------------------------------------------------- #
     """
     saves an object as pickle file.
 
@@ -634,9 +620,7 @@ def pickleit(obj, in_path):
         pickle.dump(obj, filetopickle, pickle.HIGHEST_PROTOCOL)
 
 
-# -------------------------------------------------------------- get_pickled -------------------------------------------------------------- #
 def get_pickled(in_path):
-    # -------------------------------------------------------------- get_pickled -------------------------------------------------------------- #
     """
     loads a pickled file.
 

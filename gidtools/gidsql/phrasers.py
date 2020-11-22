@@ -12,7 +12,7 @@ import queue
 import logging
 import platform
 import subprocess
-import enum
+from enum import Enum, Flag, auto
 from time import sleep
 from pprint import pprint, pformat
 from typing import Union
@@ -22,7 +22,7 @@ from contextlib import contextmanager
 from collections import Counter, ChainMap, deque, namedtuple, defaultdict
 from multiprocessing import Pool
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-import sqlite3 as sqlite
+
 # * Third Party Imports -->
 # import requests
 # import pyperclip
@@ -48,11 +48,11 @@ import sqlite3 as sqlite
 import gidlogger as glog
 from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loadjson, pickleit, writebin, pathmaker, writejson,
                                dir_change, linereadit, get_pickled, ext_splitter, appendwriteit, create_folder, from_dict_to_file)
+from gidtools.gidsql.exceptions import GidSqliteColumnAlreadySetError, GidSqliteSemiColonError
 
-from gidtools.gidsql.db_action_base import GidSqliteActionBase
 # endregion[Imports]
 
-__updated__ = '2020-11-22 09:57:16'
+__updated__ = '2020-11-12 14:32:23'
 
 # region [AppUserData]
 
@@ -70,42 +70,37 @@ log.info(glog.imported(__name__))
 # endregion[Constants]
 
 
-class Fetch(enum.Enum):
-    All = enum.auto()
-    One = enum.auto()
+def quoter(item):
+    return f'"{item}"'
 
 
-class GidSqliteReader(GidSqliteActionBase):
-    def __init__(self, in_db_loc, in_pragmas=None):
-        super().__init__(in_db_loc, in_pragmas)
-        self.row_factory = None
-        log.debug(glog.class_initiated(self.__class__))
+class GidSqliteInserter:
+    def __init__(self, table, or_ignore=False):
+        self.table = table
+        self.or_ignore = or_ignore
+        self.columns = {}
+        if ';' in self.table:
+            raise GidSqliteSemiColonError
 
-    def query(self, sql_phrase, variables: tuple = None, fetch: Fetch = Fetch.All):
-        conn = sqlite.connect(self.db_loc, isolation_level=None, detect_types=sqlite.PARSE_DECLTYPES)
-        if self.row_factory is not None:
-            conn.row_factory = self.row_factory
-        cursor = conn.cursor()
-        try:
-            self._execute_pragmas(cursor)
-            if variables is not None:
-                cursor.execute(sql_phrase, variables)
-                log.debug(f"Queried sql phrase '{sql_phrase}' with args {str(variables)} successfully")
-            else:
-                cursor.execute(sql_phrase)
-                log.debug(f"Queried Script sql phrase '{sql_phrase}' successfully")
-            _out = cursor.fetchone() if fetch is Fetch.One else cursor.fetchall()
-        except sqlite.Error as error:
-            self._handle_error(error, sql_phrase, variables)
-        finally:
-            conn.close()
-        return _out
+    def add_column(self, column, value):
+        if column in self.columns:
+            raise GidSqliteColumnAlreadySetError(self.table, column)
+        if ';' in column and ';' in value:
+            raise GidSqliteSemiColonError
+        self.columns[column] = value
 
-    def enable_row_factory(self, in_factory=sqlite.Row):
-        self.row_factory = in_factory
+    def sql_phrase(self):
+        _columns = ', '.join(map(quoter, self.columns.keys()))
+        _values = ', '.join([value for key, value in self.columns.items()])
+        phrase = 'INSERT OR IGNORE INTO ' if self.or_ignore is True else 'INSERT INTO '
+        phrase += f'"{self.table}" ' + f'({_columns}) VALUES ({_values})'
 
-    def disable_row_factory(self):
-        self.row_factory = None
+        return phrase
+
+    @staticmethod
+    def fk_select(table, output_column, input_column, condition='='):
+        return f'(SELECT "{output_column}" FROM "{table}" WHERE "{input_column}"{condition}?)'
+
 # region[Main_Exec]
 
 

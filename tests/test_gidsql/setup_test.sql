@@ -1,0 +1,14 @@
+CREATE TABLE "fk_target_tbl" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "unique_col" STRING UNIQUE NOT NULL
+);
+CREATE TABLE "fk_tbl" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "name" STRING UNIQUE NOT NULL,
+    "fk_col" INTEGER REFERENCES "fk_target_tbl" ("id") NOT NULL
+);
+CREATE TABLE "main_tbl" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name" STRING UNIQUE NOT NULL,
+    "info" STRING
+);

@@ -1,9 +1,9 @@
-@rem taskarg: ${file}
-call pssuspend64 Dropbox
-@Echo off
+@echo off
+setlocal enableextensions
 set OLDHOME_FOLDER=%~dp0
-pushd %OLDHOME_FOLDER%
-call ..\.venv\Scripts\activate.bat
+set INPATH=%~dp1
+set INFILE=%~nx1
+set INFILEBASE=%~n1
 
 rem ---------------------------------------------------
 set _date=%DATE:/=-%
@@ -20,15 +20,8 @@ set _hours=%_time:~0,2%
 set _minutes=%_time:~2,2%
 set _seconds=%_time:~4,2%
 rem ---------------------------------------------------
-
-
-set INPATH=%~dp1
-set INFILE=%~nx1
-set INFILEBASE=%~n1
-pushd %INPATH%
-mkdir %WORKSPACEDIR_BATCH%\misc\text_profiling
-python -m cProfile -s cumtime %INFILE% > %WORKSPACEDIR_BATCH%\misc\text_profiling\[%_years%-%_months%-%_days%_%_hours%-%_minutes%-%_seconds%]_%INFILEBASE%.txt
-
-
-
-call pssuspend64 Dropbox -r
+set TIMEBLOCK=%_years%-%_months%-%_days%_%_hours%-%_minutes%-%_seconds%
+Echo ################# Current time is %TIMEBLOCK%
+call ..\.venv\Scripts\activate.bat
+cd %TOPLEVELMODULE%\
+call pipreqs --savepath %WORKSPACEDIR%\found_requirements.txt

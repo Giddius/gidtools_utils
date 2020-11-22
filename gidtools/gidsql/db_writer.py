@@ -16,7 +16,7 @@ from pprint import pformat
 from gidtools.gidsql.db_action_base import GidSqliteActionBase
 # endregion [Imports]
 
-__updated__ = '2020-11-03 03:28:37'
+__updated__ = '2020-11-22 09:57:22'
 
 
 # region [Logging]
@@ -54,6 +54,7 @@ class GidSQLiteWriter(GidSqliteActionBase):
                 log.debug(f"ExecutedScript sql phrase '{sql_phrase}' successfully")
             conn.commit()
         except sqlite.Error as error:
+            print(error)
             self._handle_error(error, sql_phrase, variables)
         finally:
             conn.close()

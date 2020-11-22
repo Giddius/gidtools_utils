@@ -138,3 +138,8 @@ dmypy.json
 cython_debug/
 
 .vscode
+found_requirements.txt
+tools/_project_meta.env
+tools/create_venv_logs/create_venv.errors
+pytest_coverage/
+create_venv_logs/

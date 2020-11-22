@@ -5,7 +5,7 @@ set OLDHOME_FOLDER=%~dp0
 
 pushd %OLDHOME_FOLDER%
 
-call .\activate_with_vars.bat
+call ..\.venv\Scripts\activate.bat
 
 rem ---------------------------------------------------
 set _date=%DATE:/=-%

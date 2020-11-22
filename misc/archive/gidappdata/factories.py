@@ -22,7 +22,7 @@ import os
 import base64
 # * Gid Imports -->
 import gidlogger as glog
-from gidtools.gidconfig import Cfg, ConfigRental, ConfigHandler
+from gidconfig.standard import ConfigRental
 from gidtools.gidappdata.classes import AppDataStorageUtility
 import appdirs
 # endregion [Imports]

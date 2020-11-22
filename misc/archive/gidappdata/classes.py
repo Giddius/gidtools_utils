@@ -21,11 +21,11 @@ import sys
 from gidtools.gidfiles.functions import appendwriteit, linereadit, pathmaker, readit, writeit, writejson, loadjson
 # from gidtools.gidtriumvirate import GiUserConfig, GiSolidConfig, GiDataBase, give_std_repr
 import gidlogger as glog
-from gidtools.gidconfig import Cfg, ConfigRental
+
 import appdirs
 # endregion [Imports]
 
-__updated__ = '2020-10-31 07:40:46'
+__updated__ = '2020-11-14 14:59:20'
 
 
 # region [Logging]
@@ -160,13 +160,6 @@ class AppDataStorageUtility:
             for _file in filelist:
                 _out[_file] = pathmaker(dirname, _file)
         return _out
-
-    def generate_configs(self, **kwargs):
-        self.add_folder('config')
-        for key, value in kwargs.items():
-            self.write(f'{key}.ini', value, 'config')
-
-        ConfigRental.set_appdata(self)
 
     def __str__(self):
         return self.appstorage_folder
