@@ -45,7 +45,7 @@ from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loa
 
 # endregion[Imports]
 
-__updated__ = '2020-11-03 03:29:57'
+__updated__ = '2020-11-26 17:04:37'
 
 # region [AppUserData]
 
@@ -54,7 +54,7 @@ __updated__ = '2020-11-03 03:29:57'
 # region [Logging]
 
 log = glog.aux_logger(__name__)
-log.info(glog.imported(__name__))
+log.debug(glog.imported(__name__))
 
 # endregion[Logging]
 
@@ -67,7 +67,7 @@ class GidSqliteActionBase:
     def __init__(self, in_db_loc, in_pragmas=None):
         self.db_loc = in_db_loc
         self.pragmas = in_pragmas
-        log.debug(glog.class_initiated(self.__class__))
+        log.debug(glog.class_initiated(self))
 
     @property
     def exists(self):
@@ -88,7 +88,7 @@ class GidSqliteActionBase:
 
     @staticmethod
     def _handle_error(error, sql_phrase, variables):
-        log.critical(str(error) + f' - with SQL --> {sql_phrase} and args[{pformat(variables)}]' + '\n\n')
+        log.critical(str(error) + f' - with SQL --> {sql_phrase} and args[{pformat(variables)}]')
         if 'syntax error' in str(error):
             raise SyntaxError(error)
         else:

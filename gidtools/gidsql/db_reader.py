@@ -23,6 +23,7 @@ from collections import Counter, ChainMap, deque, namedtuple, defaultdict
 from multiprocessing import Pool
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 import sqlite3 as sqlite
+import textwrap
 # * Third Party Imports -->
 # import requests
 # import pyperclip
@@ -52,7 +53,7 @@ from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loa
 from gidtools.gidsql.db_action_base import GidSqliteActionBase
 # endregion[Imports]
 
-__updated__ = '2020-11-22 09:57:16'
+__updated__ = '2020-11-28 02:04:13'
 
 # region [AppUserData]
 
@@ -61,7 +62,7 @@ __updated__ = '2020-11-22 09:57:16'
 # region [Logging]
 
 log = glog.aux_logger(__name__)
-log.info(glog.imported(__name__))
+log.debug(glog.imported(__name__))
 
 # endregion[Logging]
 
@@ -79,7 +80,7 @@ class GidSqliteReader(GidSqliteActionBase):
     def __init__(self, in_db_loc, in_pragmas=None):
         super().__init__(in_db_loc, in_pragmas)
         self.row_factory = None
-        log.debug(glog.class_initiated(self.__class__))
+        log.debug(glog.class_initiated(self))
 
     def query(self, sql_phrase, variables: tuple = None, fetch: Fetch = Fetch.All):
         conn = sqlite.connect(self.db_loc, isolation_level=None, detect_types=sqlite.PARSE_DECLTYPES)
@@ -90,19 +91,24 @@ class GidSqliteReader(GidSqliteActionBase):
             self._execute_pragmas(cursor)
             if variables is not None:
                 cursor.execute(sql_phrase, variables)
-                log.debug(f"Queried sql phrase '{sql_phrase}' with args {str(variables)} successfully")
+                _log_sql_phrase = ' '.join(sql_phrase.replace('\n', ' ').split())
+                _log_args = textwrap.shorten(str(variables), width=200, placeholder='...')
+                log.debug(f"Queried sql phrase '{_log_sql_phrase}' with args {_log_args} successfully")
             else:
                 cursor.execute(sql_phrase)
-                log.debug(f"Queried Script sql phrase '{sql_phrase}' successfully")
+                _log_sql_phrase = ' '.join(sql_phrase.replace('\n', ' ').split())
+                log.debug(f"Queried Script sql phrase '{_log_sql_phrase}' successfully")
             _out = cursor.fetchone() if fetch is Fetch.One else cursor.fetchall()
         except sqlite.Error as error:
-            self._handle_error(error, sql_phrase, variables)
+            _log_sql_phrase = ' '.join(sql_phrase.replace('\n', ' ').split())
+            _log_args = textwrap.shorten(str(variables), width=200, placeholder='...')
+            self._handle_error(error, _log_sql_phrase, _log_args)
         finally:
             conn.close()
         return _out
 
-    def enable_row_factory(self, in_factory=sqlite.Row):
-        self.row_factory = in_factory
+    def enable_row_factory(self, in_factory=None):
+        self.row_factory = in_factory if in_factory is not None else sqlite.Row
 
     def disable_row_factory(self):
         self.row_factory = None

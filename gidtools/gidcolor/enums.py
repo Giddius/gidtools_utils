@@ -5,27 +5,7 @@ from enum import Enum, Flag, auto
 
 # endregion [Imports]
 
-__updated__ = '2020-10-14 14:35:02'
-
-
-# region [Logging]
-
-# log = glog.aux_logger(__name__)
-# log.info(glog.imported(__name__))
-
-# endregion [Logging]
-
-
-# region [Constants]
-
-
-# endregion [Constants]
-
-
-# region [Misc]
-
-
-# endregion [Misc]
+__updated__ = '2020-11-26 22:11:52'
 
 
 # region [Enums]

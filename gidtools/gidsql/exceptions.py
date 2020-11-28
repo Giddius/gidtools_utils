@@ -17,3 +17,11 @@ class GidSqliteSemiColonError(GidSqliteError):
         self.extra_message = '' if msg is None else msg
         self.message = f"forbidden Semi-colon was detected in input. {self.extra_message}"
         super().__init__(self.message)
+
+
+class GidSqliteNoTableNameError(GidSqliteError):
+    def __init__(self, extra_msg=None):
+        self.message = "No table name set!"
+        if extra_msg is not None:
+            self.message += f' {str(extra_msg)}'
+        super().__init__(self.message)

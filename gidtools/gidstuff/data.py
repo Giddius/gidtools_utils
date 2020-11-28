@@ -5,27 +5,7 @@ from enum import Enum, Flag, auto
 
 # endregion [Imports]
 
-__updated__ = '2020-10-14 14:38:20'
-
-
-# region [Logging]
-
-# log = glog.aux_logger(__name__)
-# log.info(glog.imported(__name__))
-
-# endregion [Logging]
-
-
-# region [Constants]
-
-
-# endregion [Constants]
-
-
-# region [Misc]
-
-
-# endregion [Misc]
+__updated__ = '2020-11-26 22:08:39'
 
 
 # region [Enums]
@@ -1240,36 +1220,6 @@ class GidColorHSV(Enum):
         return (int(self.hue), int(self.sat), int(self.val), int(alpha))
 
 # endregion [Enums]
-
-
-# region [Data_1]
-
-
-# endregion [Data_1]
-
-
-# region [Data_2]
-
-
-# endregion [Data_2]
-
-
-# region [Data_3]
-
-
-# endregion [Data_3]
-
-
-# region [Data_4]
-
-
-# endregion [Data_4]
-
-
-# region [Data_5]
-
-
-# endregion [Data_5]
 
 
 # region [Main_Exec]

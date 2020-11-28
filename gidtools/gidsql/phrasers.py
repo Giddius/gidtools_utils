@@ -48,11 +48,11 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 import gidlogger as glog
 from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loadjson, pickleit, writebin, pathmaker, writejson,
                                dir_change, linereadit, get_pickled, ext_splitter, appendwriteit, create_folder, from_dict_to_file)
-from gidtools.gidsql.exceptions import GidSqliteColumnAlreadySetError, GidSqliteSemiColonError
+from gidtools.gidsql.exceptions import GidSqliteColumnAlreadySetError, GidSqliteSemiColonError, GidSqliteNoTableNameError
 
 # endregion[Imports]
 
-__updated__ = '2020-11-12 14:32:23'
+__updated__ = '2020-11-22 14:12:31'
 
 # region [AppUserData]
 
@@ -61,7 +61,7 @@ __updated__ = '2020-11-12 14:32:23'
 # region [Logging]
 
 log = glog.aux_logger(__name__)
-log.info(glog.imported(__name__))
+log.debug(glog.imported(__name__))
 
 # endregion[Logging]
 
@@ -75,12 +75,18 @@ def quoter(item):
 
 
 class GidSqliteInserter:
-    def __init__(self, table, or_ignore=False):
-        self.table = table
-        self.or_ignore = or_ignore
+    def __init__(self):
+        self.table = None
+        self.or_ignore = False
         self.columns = {}
+
+    def set_table_name(self, name: str):
+        self.table = name
         if ';' in self.table:
             raise GidSqliteSemiColonError
+
+    def set_or_ignore(self, value: bool):
+        self.or_ignore = value
 
     def add_column(self, column, value):
         if column in self.columns:
@@ -90,6 +96,9 @@ class GidSqliteInserter:
         self.columns[column] = value
 
     def sql_phrase(self):
+        if self.table is None:
+            raise GidSqliteNoTableNameError
+
         _columns = ', '.join(map(quoter, self.columns.keys()))
         _values = ', '.join([value for key, value in self.columns.items()])
         phrase = 'INSERT OR IGNORE INTO ' if self.or_ignore is True else 'INSERT INTO '

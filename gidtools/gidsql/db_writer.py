@@ -12,17 +12,17 @@ import enum
 import gidlogger as glog
 from gidtools.gidfiles import readit, writeit, splitoff, pathmaker, ext_splitter, cascade_rename
 from pprint import pformat
-
+import textwrap
 from gidtools.gidsql.db_action_base import GidSqliteActionBase
 # endregion [Imports]
 
-__updated__ = '2020-11-22 09:57:22'
+__updated__ = '2020-11-26 17:04:24'
 
 
 # region [Logging]
 
 log = glog.aux_logger(__name__)
-log.info(glog.imported(__name__))
+log.debug(glog.imported(__name__))
 
 # endregion [Logging]
 
@@ -32,7 +32,7 @@ log.info(glog.imported(__name__))
 class GidSQLiteWriter(GidSqliteActionBase):
     def __init__(self, in_db_loc, in_pragmas=None):
         super().__init__(in_db_loc, in_pragmas)
-        log.debug(glog.class_initiated(self.__class__))
+        log.debug(glog.class_initiated(self))
 
     def write(self, sql_phrase: str, variables: Union[str, tuple, list] = None):
         conn = sqlite.connect(self.db_loc, isolation_level=None, detect_types=sqlite.PARSE_DECLTYPES)
@@ -42,20 +42,28 @@ class GidSQLiteWriter(GidSqliteActionBase):
             if variables is not None:
                 if isinstance(variables, str):
                     cursor.execute(sql_phrase, (variables,))
-                    log.debug(f"Executed sql phrase '{sql_phrase}' with args {str(variables)} successfully")
+                    _log_sql_phrase = ' '.join(sql_phrase.replace('\n', ' ').split())
+                    _log_args = textwrap.shorten(str(variables), width=200, placeholder='...')
+                    log.debug(f"Executed sql phrase '{_log_sql_phrase}' with args {_log_args} successfully")
                 elif isinstance(variables, tuple):
                     cursor.execute(sql_phrase, variables)
-                    log.debug(f"Executed sql phrase '{sql_phrase}' with args {str(variables)} successfully")
+                    _log_sql_phrase = ' '.join(sql_phrase.replace('\n', ' ').split())
+                    _log_args = textwrap.shorten(str(variables), width=200, placeholder='...')
+                    log.debug(f"Executed sql phrase '{_log_sql_phrase}' with args {_log_args} successfully")
                 elif isinstance(variables, list):
                     cursor.executemany(sql_phrase, variables)
-                    log.debug(f"ExecutedMany sql phrase from '{sql_phrase}' with arg-iterable {pformat(variables)} successfully")
+                    _log_sql_phrase = ' '.join(sql_phrase.replace('\n', ' ').split())
+                    _log_args = textwrap.shorten(str(variables), width=200, placeholder='...')
+                    log.debug(f"ExecutedMany sql phrase from '{_log_sql_phrase}' with arg-iterable {_log_args} successfully")
             else:
                 cursor.executescript(sql_phrase)
-                log.debug(f"ExecutedScript sql phrase '{sql_phrase}' successfully")
+                _log_sql_phrase = ' '.join(sql_phrase.replace('\n', ' ').split())
+                log.debug(f"ExecutedScript sql phrase '{_log_sql_phrase}' successfully")
             conn.commit()
         except sqlite.Error as error:
-            print(error)
-            self._handle_error(error, sql_phrase, variables)
+            _log_sql_phrase = ' '.join(sql_phrase.replace('\n', ' ').split())
+            _log_args = textwrap.shorten(str(variables), width=200, placeholder='...')
+            self._handle_error(error, _log_sql_phrase, _log_args)
         finally:
             conn.close()
 

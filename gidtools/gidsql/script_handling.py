@@ -6,19 +6,19 @@ import shutil
 import sqlite3 as sqlite
 import configparser
 from sqlite3.dbapi2 import Error
-
+from pprint import pformat
 # * Gid Imports -->
 import gidlogger as glog
 from gidtools.gidfiles import readit, writeit, splitoff, pathmaker, ext_splitter, cascade_rename
 
 # endregion [Imports]
 
-__updated__ = '2020-11-21 20:12:30'
+__updated__ = '2020-11-22 15:00:32'
 
 
 # region [Logging]
 log = glog.aux_logger(__name__)
-log.info(glog.imported(__name__))
+log.debug(glog.imported(__name__))
 
 # endregion [Logging]
 
@@ -50,6 +50,34 @@ class GidSqliteScriptProvider:
         _file = self.scripts.get(key, None)
         if _file:
             return readit(_file)
+
+    def __contains__(self, key):
+        return key in self.scripts
+
+    def __len__(self):
+        return len(self.scripts)
+
+    def __setitem__(self, key, value):
+        _name = key + '.sql'
+        _path = pathmaker(self.script_folder, _name)
+        writeit(_path, value)
+
+    def get(self, key, default=None):
+        _out = self[key]
+        if _out is None:
+            _out = default
+
+        return _out
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.script_folder})"
+
+    def __str__(self):
+        _out = []
+        for _file in os.scandir(self.script_folder):
+            if _file.name.endswith('.sql'):
+                _out.append(_file.name)
+        return pformat(_out)
 
 
 if __name__ == '__main__':

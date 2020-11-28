@@ -23,38 +23,19 @@ from collections import Counter, ChainMap, deque, namedtuple, defaultdict
 from multiprocessing import Pool
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
-# * Third Party Imports -->
-# import requests
-# import pyperclip
-# import matplotlib.pyplot as plt
-# from bs4 import BeautifulSoup
-# from dotenv import load_dotenv
-# from github import Github, GithubException
-# from jinja2 import BaseLoader, Environment
-# from natsort import natsorted
-# from fuzzywuzzy import fuzz, process
 
-# * PyQt5 Imports -->
-# from PyQt5.QtGui import QFont, QIcon, QBrush, QColor, QCursor, QPixmap, QStandardItem, QRegExpValidator
-# from PyQt5.QtCore import (Qt, QRect, QSize, QObject, QRegExp, QThread, QMetaObject, QCoreApplication,
-#                           QFileSystemWatcher, QPropertyAnimation, QAbstractTableModel, pyqtSlot, pyqtSignal)
-# from PyQt5.QtWidgets import (QMenu, QFrame, QLabel, QDialog, QLayout, QWidget, QWizard, QMenuBar, QSpinBox, QCheckBox, QComboBox,
-#                              QGroupBox, QLineEdit, QListView, QCompleter, QStatusBar, QTableView, QTabWidget, QDockWidget, QFileDialog,
-#                              QFormLayout, QGridLayout, QHBoxLayout, QHeaderView, QListWidget, QMainWindow, QMessageBox, QPushButton,
-#                              QSizePolicy, QSpacerItem, QToolButton, QVBoxLayout, QWizardPage, QApplication, QButtonGroup, QRadioButton,
-#                              QFontComboBox, QStackedWidget, QListWidgetItem, QTreeWidgetItem, QDialogButtonBox, QAbstractItemView,
-#                              QCommandLinkButton, QAbstractScrollArea, QGraphicsOpacityEffect, QTreeWidgetItemIterator, QAction, QSystemTrayIcon)
 # * Gid Imports -->
 import gidlogger as glog
 from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loadjson, pickleit, writebin, pathmaker, writejson,
                                dir_change, linereadit, get_pickled, ext_splitter, appendwriteit, create_folder, from_dict_to_file)
 
 from gidtools.gidsql.db_writer import GidSQLiteWriter
-from gidtools.gidsql.db_reader import GidSqliteReader
+from gidtools.gidsql.db_reader import GidSqliteReader, Fetch
 from gidtools.gidsql.script_handling import GidSqliteScriptProvider
+from gidtools.gidsql.phrasers import GidSqliteInserter
 # endregion[Imports]
 
-__updated__ = '2020-11-22 10:35:46'
+__updated__ = '2020-11-28 03:29:05'
 
 # region [AppUserData]
 
@@ -63,7 +44,7 @@ __updated__ = '2020-11-22 10:35:46'
 # region [Logging]
 
 log = glog.aux_logger(__name__)
-log.info(glog.imported(__name__))
+log.debug(glog.imported(__name__))
 
 # endregion[Logging]
 
@@ -72,27 +53,75 @@ THIS_FILE_DIR = os.path.abspath(os.path.dirname(__file__))
 # endregion[Constants]
 
 
+class PhraseType(Enum):
+    Insert = auto()
+    Query = auto()
+    Create = auto()
+    Drop = auto()
+
+
 class GidSqliteDatabase:
+    Insert = PhraseType.Insert
+    Query = PhraseType.Query
+    Create = PhraseType.Create
+    Drop = PhraseType.Drop
+
+    All = Fetch.All
+    One = Fetch.One
+
+    phrase_objects = {Insert: GidSqliteInserter, Query: None, Create: None, Drop: None}
+
     def __init__(self, db_location, script_location, config=None):
         self.path = db_location
+        self.script_location = script_location
         self.config = config
         self.pragmas = None
         if self.config is not None:
             self.pragmas = self.config.getlist('general_settings', 'pragmas')
-        self.writer = GidSQLiteWriter(db_location, self.pragmas)
-        self.reader = GidSqliteReader(db_location, self.pragmas)
-        self.scripter = GidSqliteScriptProvider(script_location)
+        self.writer = GidSQLiteWriter(self.path, self.pragmas)
+        self.reader = GidSqliteReader(self.path, self.pragmas)
+        self.scripter = GidSqliteScriptProvider(self.script_location)
         self.config = config
 
     def startup_db(self, overwrite=False):
         if os.path.exists(self.path) is True and overwrite is False:
             return None
-        else:
+        if os.path.exists(self.path) is True:
             os.remove(self.path)
-            for script in self.scripter.setup_scripts:
-                self.writer.write(script)
+        for script in self.scripter.setup_scripts:
+            self.writer.write(script)
 
-# region[Main_Exec]
+    def new_phrase(self, typus: PhraseType):
+        return self.phrase_objects.get(typus)()
+
+    def write(self, phrase, variables=None):
+        if isinstance(phrase, str):
+            sql_phrase = self.scripter.get(phrase, None)
+            if sql_phrase is None:
+                sql_phrase = phrase
+            self.writer.write(sql_phrase, variables)
+
+    def query(self, phrase, variables=None, fetch: Fetch = Fetch.All, row_factory: Union[bool, any] = False):
+        if row_factory:
+            _factory = None if isinstance(row_factory, bool) is True else row_factory
+            self.reader.enable_row_factory(in_factory=_factory)
+        sql_phrase = self.scripter.get(phrase, None)
+        if sql_phrase is None:
+            sql_phrase = phrase
+        _out = self.reader.query(sql_phrase, variables=variables, fetch=fetch)
+        self.reader.disable_row_factory()
+        return _out
+
+    def vacuum(self):
+        self.write('VACUUM')
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.path}, {self.script_location}, {self.config})"
+
+    def __str__(self) -> str:
+        return self.__class__.__name__
+
+    # region[Main_Exec]
 
 
 if __name__ == '__main__':
