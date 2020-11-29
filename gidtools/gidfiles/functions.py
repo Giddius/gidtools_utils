@@ -10,6 +10,8 @@ import datetime
 import configparser
 from pprint import pformat
 from contextlib import contextmanager
+from typing import Union
+import sys
 
 # * Gid Imports -->
 import gidlogger as glog
@@ -38,6 +40,7 @@ log.debug(glog.imported(__name__))
 
 
 # region [Function_JSON]
+
 
 def loadjson(in_file):
     with open(in_file, 'r') as jsonfile:
@@ -244,6 +247,24 @@ def clearit(in_file):
 # region [Functions_Paths]
 
 
+def _split_path_elements(path: str):
+
+    def _typed_join(in_data: Union[str, list]):
+        if isinstance(in_data, list):
+            return os.path.join(*in_data)
+        elif isinstance(in_data, str):
+            return os.path.join(in_data)
+
+    if '\\\\' in path:
+        return _typed_join(path.split('\\\\'))
+    elif '\\' in path:
+        return _typed_join(path.split('\\'))
+    elif '/' in path:
+        return _typed_join(path.split('/'))
+    else:
+        return _typed_join(path)
+
+
 def pathmaker(first_segment, *in_path_segments, rev=False):
     """
     Normalizes input path or path fragments, replaces '\\\\' with '/' and combines fragments.
@@ -260,14 +281,13 @@ def pathmaker(first_segment, *in_path_segments, rev=False):
     str
         New path from segments and normalized.
     """
-    _first = os.getcwd() if first_segment == 'cwd' else first_segment
-    _path = os.path.join(_first, *in_path_segments)
-    _path = _path.replace('\\\\', '/')
-    _path = _path.replace('\\', '/')
-    if rev is True:
-        _path = _path.replace('/', '\\')
 
-    return _path.strip()
+    _path = first_segment
+
+    _path = os.path.join(_path, *in_path_segments)
+    if rev is True or sys.platform not in ['win32', 'linux']:
+        return os.path.normpath(_path)
+    return os.path.normpath(_path).replace(os.path.sep, '/')
 
 
 # -------------------------------------------------------------- work_in -------------------------------------------------------------- #

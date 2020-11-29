@@ -3,15 +3,19 @@ from gidtools.gidfiles.functions import (pathmaker, path_part_remove, loadjson, 
 import pytest
 import json
 import os
+import sys
 
 
+@ pytest.mark.skipif(sys.platform not in ['win32', 'linux'], reason="paths are specific to windows and linux")
 def test_pathmaker():
     assert pathmaker('bin', 'folder') == 'bin/folder'
     assert pathmaker(r"C:\Users\name\file") == 'C:/Users/name/file'
     assert pathmaker(r"C:\\Users\\name\\file") == 'C:/Users/name/file'
     assert pathmaker(r'C:/Users/name/file', rev=True) == r'C:\Users\name\file'
+    assert pathmaker(r'C:/Users/name', '../other_name') == r'C:/Users/other_name'
 
 
+@ pytest.mark.skipif(sys.platform not in ['win32', 'linux'], reason="paths are specific to windows and linux")
 def test_path_part_remove():
     assert path_part_remove('C:/Users/name/file') == 'C:/Users/name'
     assert path_part_remove(r"C:\\Users\\name\\file") == 'C:/Users/name'
@@ -82,8 +86,26 @@ def test_ext_splitter(tmpdir):
 def test_file_name_modifier(tmpdir):
     _file = str(tmpdir.join('test_file.txt'))
     _mod_file = str(tmpdir.join('modified_test_file.txt')).replace('\\', '/')
+    _mod_file_2 = str(tmpdir.join('test_file_modified.txt')).replace('\\', '/')
+    _mod_file_3 = str(tmpdir.join('modifiedtest_file.txt')).replace('\\', '/')
     new_path = file_name_modifier(_file, 'modified', seperator='_')
     assert new_path == _mod_file
+
+    new_path = file_name_modifier(_file, 'modified', seperator='_', pos='postfix')
+    assert new_path == _mod_file_2
+
+    new_path = file_name_modifier(_file, 'modified', seperator='_', new_ext="jpg")
+    assert new_path == _mod_file.split('.')[0] + '.jpg'
+
+    new_path = file_name_modifier(_file, 'modified')
+    assert new_path == _mod_file_3
+
+    with pytest.raises(Exception):
+        new_path = file_name_modifier(_file, 'modi/fied', seperator='_')
+    with pytest.raises(Exception):
+        new_path = file_name_modifier(_file, 'modified', seperator=':')
+    with pytest.raises(Exception):
+        new_path = file_name_modifier(_file, 'modified', seperator='_', new_ext='dd:a')
 
 
 def test_clearit(simple_txt_file):
