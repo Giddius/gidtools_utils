@@ -1,5 +1,5 @@
 from gidtools.gidfiles.functions import (pathmaker, path_part_remove, loadjson, writejson, readit, readbin,
-                                         linereadit, writebin, writeit, clearit, work_in, ext_splitter, file_name_modifier, create_folder)
+                                         linereadit, writebin, writeit, clearit, work_in, ext_splitter, file_name_modifier, create_folder, to_attr_name, filename_to_attr_name)
 import pytest
 import json
 import os
@@ -121,3 +121,33 @@ def test_creat_folder(tmpdir):
     assert os.path.exists(_target_folder) is False
     create_folder(_target_folder)
     assert os.path.exists(_target_folder) is True
+
+
+def test_to_attr_name():
+    test_data = [
+        ('example', 'example'),
+        (' example', 'example'),
+        ('other_example', 'other_example'),
+        ('UPPERCASE_example', 'uppercase_example'),
+        ('scharfes_ß_example', 'scharfes_ss_example'),
+        ('example-example', 'example_example'),
+        ('example example', 'example_example'),
+        ('example.test', 'example__test'),
+        ('whitespace         example', 'whitespace_example'),
+        ('   multiple   whitespace   example   ', 'multiple_whitespace_example'),
+        ('dotted......example....test', 'dotted__example__test'),
+        ('example/example', 'example_example'),
+        (r'example\example', 'example_example'),
+        ('--stripexample', 'stripexample')
+    ]
+    for source, target in test_data:
+        assert to_attr_name(source) == target
+
+
+def test_filename_to_attr_name():
+    test_data = [("Petros is stupid.png", 'petros_is_stupid', False),
+                 ("Petros is stupid.xcf", 'petros_is_stupid__xcf', True),
+                 (r"D:\Dropbox\hobby\Modding\Ressources\Alphas\Petros is stupid2.png", 'petros_is_stupid2', False),
+                 ("D:/Dropbox/hobby/Modding/Ressources/Alphas/Thanks & advices.txt", "thanks___advices__txt", True)]
+    for source, target, keep_ext in test_data:
+        assert filename_to_attr_name(source, keep_ext=keep_ext) == target

@@ -12,7 +12,7 @@ from pprint import pformat
 from contextlib import contextmanager
 from typing import Union
 import sys
-
+import re
 # * Gid Imports -->
 import gidlogger as glog
 
@@ -29,6 +29,7 @@ log.debug(glog.imported(__name__))
 
 # region [Constants]
 
+WHITESPACE_REGEX = re.compile(r"\s+")
 
 # endregion [Constants]
 
@@ -742,13 +743,62 @@ def create_folder(in_path):
     else:
         log.info(f"Folder '{in_path}' does exist!")
 
+
+def to_attr_name(in_name):
+
+    replace_dict = {' ': '_',
+                    '-': '_',
+                    '.': '__',
+                    '/': '_',
+                    '\\': '_',
+                    '*': '',
+                    '{': '_',
+                    '}': '_',
+                    '[': '_',
+                    ']': '_',
+                    '(': '_',
+                    ')': '_',
+                    '>': '_',
+                    '<': '_',
+                    '#': '_',
+                    '+': '_',
+                    '&': '_',
+                    '$': '_',
+                    "'": '',
+                    '"': '', }
+
+    attr_name = in_name.strip()
+
+    for to_replace, replacement in replace_dict.items():
+        if to_replace in attr_name:
+            for amount in reversed(range(1, 10)):
+                if to_replace * amount in attr_name:
+
+                    attr_name = attr_name.lstrip(to_replace * amount).rstrip(to_replace * amount).replace(to_replace * amount, replacement)
+    return attr_name.casefold()
+
+
+def filename_to_attr_name(in_file, keep_ext=False):
+    attr_name = in_file
+    if os.path.sep in attr_name or '/' in attr_name:
+        attr_name = os.path.basename(attr_name)
+    if keep_ext is False:
+        attr_name = os.path.splitext(attr_name)[0]
+    return to_attr_name(attr_name)
+
 # endregion [Functions_Misc]
 
 
 # region [Main_Exec]
 # sourcery skip: remove-redundant-if
 if __name__ == '__main__':
+    # from timeit import Timer
+
+    # def a():
+    #     to_attr_name('dotted..   ....example...-------.test')
+
+    # t = Timer(a)
+    # for i in range(10):
+    #     print(t.timeit(1000))
     pass
-
-
 # endregion [Main_Exec]
