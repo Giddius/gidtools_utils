@@ -5,20 +5,21 @@ import os
 import sys
 import shutil
 from pprint import pformat
-
+import logging
 # * Gid Imports -->
 import gidlogger as glog
 from gidtools.gidfiles.functions import readit, clearit, writeit, loadjson, pathmaker, writejson, linereadit, appendwriteit
 
 # endregion [Imports]
 
-__updated__ = '2020-11-26 22:11:43'
+__updated__ = '2020-12-03 05:15:53'
 
 
 # region [Logging]
 
-log = glog.aux_logger(__name__)
-log.debug(glog.imported(__name__))
+log = logging.getLogger('gidfiles')
+
+glog.import_notification(log, __name__)
 
 # endregion [Logging]
 

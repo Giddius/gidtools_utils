@@ -24,23 +24,10 @@ from multiprocessing import Pool
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 import sqlite3 as sqlite
 from sqlite3.dbapi2 import Error
-# * Third Party Imports -->
-# import requests
-# import pyperclip
-# import matplotlib.pyplot as plt
-# from bs4 import BeautifulSoup
-# from dotenv import load_dotenv
-# from github import Github, GithubException
-# from jinja2 import BaseLoader, Environment
-# from natsort import natsorted
-# from fuzzywuzzy import fuzz, process
-
-# * PyQt5 Imports -->
+import logging
 
 # * Gid Imports -->
 import gidlogger as glog
-from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loadjson, pickleit, writebin, pathmaker, writejson,
-                               dir_change, linereadit, get_pickled, ext_splitter, appendwriteit, create_folder, from_dict_to_file)
 
 
 # endregion[Imports]
@@ -53,8 +40,9 @@ __updated__ = '2020-11-26 17:04:37'
 
 # region [Logging]
 
-log = glog.aux_logger(__name__)
-log.debug(glog.imported(__name__))
+log = logging.getLogger('gidsql')
+
+glog.import_notification(log, __name__)
 
 # endregion[Logging]
 
@@ -67,7 +55,7 @@ class GidSqliteActionBase:
     def __init__(self, in_db_loc, in_pragmas=None):
         self.db_loc = in_db_loc
         self.pragmas = in_pragmas
-        log.debug(glog.class_initiated(self))
+        glog.class_init_notification(log, self)
 
     @property
     def exists(self):

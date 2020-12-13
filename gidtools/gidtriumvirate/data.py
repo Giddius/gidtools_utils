@@ -2,7 +2,7 @@
 
 # * Gid Imports -->
 import gidlogger as glog
-
+import os
 # endregion [Imports]
 
 __updated__ = '2020-10-14 14:39:03'
@@ -16,7 +16,8 @@ __updated__ = '2020-10-14 14:39:03'
 # region [Logging]
 
 log = glog.aux_logger(__name__)
-log.debug(glog.imported(__name__))
+
+glog.import_notification(log, __name__)
 
 # endregion [Logging]
 

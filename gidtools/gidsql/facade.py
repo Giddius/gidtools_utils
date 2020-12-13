@@ -22,12 +22,10 @@ from contextlib import contextmanager
 from collections import Counter, ChainMap, deque, namedtuple, defaultdict
 from multiprocessing import Pool
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
-
+import logging
 
 # * Gid Imports -->
 import gidlogger as glog
-from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loadjson, pickleit, writebin, pathmaker, writejson,
-                               dir_change, linereadit, get_pickled, ext_splitter, appendwriteit, create_folder, from_dict_to_file)
 
 from gidtools.gidsql.db_writer import GidSQLiteWriter
 from gidtools.gidsql.db_reader import GidSqliteReader, Fetch
@@ -43,8 +41,9 @@ __updated__ = '2020-11-28 03:29:05'
 
 # region [Logging]
 
-log = glog.aux_logger(__name__)
-log.debug(glog.imported(__name__))
+log = logging.getLogger('gidsql')
+
+glog.import_notification(log, __name__)
 
 # endregion[Logging]
 

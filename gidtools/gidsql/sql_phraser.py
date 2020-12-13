@@ -23,23 +23,10 @@ from collections import Counter, ChainMap, deque, namedtuple, defaultdict
 from multiprocessing import Pool
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 import sqlite3 as sqlite
-# * Third Party Imports -->
-# import requests
-# import pyperclip
-# import matplotlib.pyplot as plt
-# from bs4 import BeautifulSoup
-# from dotenv import load_dotenv
-# from github import Github, GithubException
-# from jinja2 import BaseLoader, Environment
-# from natsort import natsorted
-# from fuzzywuzzy import fuzz, process
-
-# * PyQt5 Imports -->
+import logging
 
 # * Gid Imports -->
 import gidlogger as glog
-from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loadjson, pickleit, writebin, pathmaker, writejson,
-                               dir_change, linereadit, get_pickled, ext_splitter, appendwriteit, create_folder, from_dict_to_file)
 
 
 # endregion[Imports]
@@ -52,8 +39,9 @@ __updated__ = '2020-11-03 03:34:53'
 
 # region [Logging]
 
-log = glog.aux_logger(__name__)
-log.debug(glog.imported(__name__))
+log = logging.getLogger('gidsql')
+
+glog.import_notification(log, __name__)
 
 # endregion[Logging]
 

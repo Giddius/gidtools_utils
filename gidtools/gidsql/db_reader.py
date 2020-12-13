@@ -24,31 +24,11 @@ from multiprocessing import Pool
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 import sqlite3 as sqlite
 import textwrap
-# * Third Party Imports -->
-# import requests
-# import pyperclip
-# import matplotlib.pyplot as plt
-# from bs4 import BeautifulSoup
-# from dotenv import load_dotenv
-# from github import Github, GithubException
-# from jinja2 import BaseLoader, Environment
-# from natsort import natsorted
-# from fuzzywuzzy import fuzz, process
+import logging
 
-# * PyQt5 Imports -->
-# from PyQt5.QtGui import QFont, QIcon, QBrush, QColor, QCursor, QPixmap, QStandardItem, QRegExpValidator
-# from PyQt5.QtCore import (Qt, QRect, QSize, QObject, QRegExp, QThread, QMetaObject, QCoreApplication,
-#                           QFileSystemWatcher, QPropertyAnimation, QAbstractTableModel, pyqtSlot, pyqtSignal)
-# from PyQt5.QtWidgets import (QMenu, QFrame, QLabel, QDialog, QLayout, QWidget, QWizard, QMenuBar, QSpinBox, QCheckBox, QComboBox,
-#                              QGroupBox, QLineEdit, QListView, QCompleter, QStatusBar, QTableView, QTabWidget, QDockWidget, QFileDialog,
-#                              QFormLayout, QGridLayout, QHBoxLayout, QHeaderView, QListWidget, QMainWindow, QMessageBox, QPushButton,
-#                              QSizePolicy, QSpacerItem, QToolButton, QVBoxLayout, QWizardPage, QApplication, QButtonGroup, QRadioButton,
-#                              QFontComboBox, QStackedWidget, QListWidgetItem, QTreeWidgetItem, QDialogButtonBox, QAbstractItemView,
-#                              QCommandLinkButton, QAbstractScrollArea, QGraphicsOpacityEffect, QTreeWidgetItemIterator, QAction, QSystemTrayIcon)
 # * Gid Imports -->
 import gidlogger as glog
-from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loadjson, pickleit, writebin, pathmaker, writejson,
-                               dir_change, linereadit, get_pickled, ext_splitter, appendwriteit, create_folder, from_dict_to_file)
+
 
 from gidtools.gidsql.db_action_base import GidSqliteActionBase
 # endregion[Imports]
@@ -61,8 +41,9 @@ __updated__ = '2020-11-28 02:04:13'
 
 # region [Logging]
 
-log = glog.aux_logger(__name__)
-log.debug(glog.imported(__name__))
+log = logging.getLogger('gidsql')
+
+glog.import_notification(log, __name__)
 
 # endregion[Logging]
 
@@ -80,7 +61,7 @@ class GidSqliteReader(GidSqliteActionBase):
     def __init__(self, in_db_loc, in_pragmas=None):
         super().__init__(in_db_loc, in_pragmas)
         self.row_factory = None
-        log.debug(glog.class_initiated(self))
+        glog.class_init_notification(log, self)
 
     def query(self, sql_phrase, variables: tuple = None, fetch: Fetch = Fetch.All):
         conn = sqlite.connect(self.db_loc, isolation_level=None, detect_types=sqlite.PARSE_DECLTYPES)

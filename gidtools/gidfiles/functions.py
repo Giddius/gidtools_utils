@@ -13,6 +13,7 @@ from contextlib import contextmanager
 from typing import Union
 import sys
 import re
+import logging
 # * Gid Imports -->
 import gidlogger as glog
 
@@ -21,8 +22,9 @@ import gidlogger as glog
 
 # region [Logging]
 
-log = glog.aux_logger(__name__)
-log.debug(glog.imported(__name__))
+log = logging.getLogger('gidfiles')
+
+glog.import_notification(log, __name__)
 
 # endregion [Logging]
 

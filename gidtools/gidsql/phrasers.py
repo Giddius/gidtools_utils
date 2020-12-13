@@ -22,32 +22,11 @@ from contextlib import contextmanager
 from collections import Counter, ChainMap, deque, namedtuple, defaultdict
 from multiprocessing import Pool
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+import logging
 
-# * Third Party Imports -->
-# import requests
-# import pyperclip
-# import matplotlib.pyplot as plt
-# from bs4 import BeautifulSoup
-# from dotenv import load_dotenv
-# from github import Github, GithubException
-# from jinja2 import BaseLoader, Environment
-# from natsort import natsorted
-# from fuzzywuzzy import fuzz, process
-
-# * PyQt5 Imports -->
-# from PyQt5.QtGui import QFont, QIcon, QBrush, QColor, QCursor, QPixmap, QStandardItem, QRegExpValidator
-# from PyQt5.QtCore import (Qt, QRect, QSize, QObject, QRegExp, QThread, QMetaObject, QCoreApplication,
-#                           QFileSystemWatcher, QPropertyAnimation, QAbstractTableModel, pyqtSlot, pyqtSignal)
-# from PyQt5.QtWidgets import (QMenu, QFrame, QLabel, QDialog, QLayout, QWidget, QWizard, QMenuBar, QSpinBox, QCheckBox, QComboBox,
-#                              QGroupBox, QLineEdit, QListView, QCompleter, QStatusBar, QTableView, QTabWidget, QDockWidget, QFileDialog,
-#                              QFormLayout, QGridLayout, QHBoxLayout, QHeaderView, QListWidget, QMainWindow, QMessageBox, QPushButton,
-#                              QSizePolicy, QSpacerItem, QToolButton, QVBoxLayout, QWizardPage, QApplication, QButtonGroup, QRadioButton,
-#                              QFontComboBox, QStackedWidget, QListWidgetItem, QTreeWidgetItem, QDialogButtonBox, QAbstractItemView,
-#                              QCommandLinkButton, QAbstractScrollArea, QGraphicsOpacityEffect, QTreeWidgetItemIterator, QAction, QSystemTrayIcon)
 # * Gid Imports -->
 import gidlogger as glog
-from gidtools.gidfiles import (QuickFile, readit, clearit, readbin, writeit, loadjson, pickleit, writebin, pathmaker, writejson,
-                               dir_change, linereadit, get_pickled, ext_splitter, appendwriteit, create_folder, from_dict_to_file)
+
 from gidtools.gidsql.exceptions import GidSqliteColumnAlreadySetError, GidSqliteSemiColonError, GidSqliteNoTableNameError
 
 # endregion[Imports]
@@ -60,8 +39,9 @@ __updated__ = '2020-11-22 14:12:31'
 
 # region [Logging]
 
-log = glog.aux_logger(__name__)
-log.debug(glog.imported(__name__))
+log = logging.getLogger('gidsql')
+
+glog.import_notification(log, __name__)
 
 # endregion[Logging]
 

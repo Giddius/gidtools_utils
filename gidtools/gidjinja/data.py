@@ -16,7 +16,8 @@ __updated__ = '2020-07-24 02:51:09'
 # region [Logging]
 
 log = glog.aux_logger(__name__)
-log.debug(glog.imported(__name__))
+
+glog.import_notification(log, __name__)
 
 # endregion [Logging]
 

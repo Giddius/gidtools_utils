@@ -8,12 +8,13 @@ import configparser
 from sqlite3.dbapi2 import Error
 from typing import Union
 import enum
+import logging
 # * Gid Imports -->
 import gidlogger as glog
-from gidtools.gidfiles import readit, writeit, splitoff, pathmaker, ext_splitter, cascade_rename
-from pprint import pformat
+
 import textwrap
 from gidtools.gidsql.db_action_base import GidSqliteActionBase
+
 # endregion [Imports]
 
 __updated__ = '2020-11-26 17:04:24'
@@ -21,8 +22,9 @@ __updated__ = '2020-11-26 17:04:24'
 
 # region [Logging]
 
-log = glog.aux_logger(__name__)
-log.debug(glog.imported(__name__))
+log = logging.getLogger('gidsql')
+
+glog.import_notification(log, __name__)
 
 # endregion [Logging]
 
@@ -32,7 +34,7 @@ log.debug(glog.imported(__name__))
 class GidSQLiteWriter(GidSqliteActionBase):
     def __init__(self, in_db_loc, in_pragmas=None):
         super().__init__(in_db_loc, in_pragmas)
-        log.debug(glog.class_initiated(self))
+        glog.class_init_notification(log, self)
 
     def write(self, sql_phrase: str, variables: Union[str, tuple, list] = None):
         conn = sqlite.connect(self.db_loc, isolation_level=None, detect_types=sqlite.PARSE_DECLTYPES)
